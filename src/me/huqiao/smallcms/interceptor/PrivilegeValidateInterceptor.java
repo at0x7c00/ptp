@@ -48,9 +48,9 @@ public class PrivilegeValidateInterceptor extends HandlerInterceptorAdapter {
     	"about.do",
     	"adminIndex.do",
     	"api/",
-    	"regist.do",
+    	"register.do",
     	"iforget.do",
-    	"search.do"
+    	"query/"
 	};
 	private static final String[] urlsWithLogin = new String[] {// 只需要登录就能拥有的权限
 		"home.do",
@@ -296,7 +296,7 @@ public class PrivilegeValidateInterceptor extends HandlerInterceptorAdapter {
 	 * @throws Exception抛出异常
 	 */
 	private void returnNoPrivilege(HttpServletResponse response) throws Exception{
-		outputJsonResult(response,JsonResult.STATUS_CODE_NO_PERMISSION,JsonResult.LOGIN_UI_URL,"您无权限进行该操作！");
+		outputJsonResult(response,JsonResult.STATUS_CODE_NO_PERMISSION,JsonResult.LOGIN_UI_URL,"您无权限进行该操作！(Permission Delay)");
 	}
 	/**
 	 * 输出json格式字符串

@@ -19,6 +19,7 @@ import me.huqiao.smallcms.sys.entity.propertyeditor.UserEditor;
 import me.huqiao.smallcms.sys.service.IUserService;
 import me.huqiao.smallcms.trace.entity.Category;
 import me.huqiao.smallcms.trace.entity.Product;
+import me.huqiao.smallcms.trace.entity.RegisterApply;
 import me.huqiao.smallcms.trace.entity.enumtype.ProductStatus;
 import me.huqiao.smallcms.trace.entity.propertyeditor.CategoryEditor;
 import me.huqiao.smallcms.trace.service.ICategoryService;
@@ -179,7 +180,11 @@ public class ProductController  extends BaseController {
 		product.getOtherQualifications().addAll(otherQualificationseys);
 		
 		product.setManageKey(Md5Util.getManageKey());
-		product.setUuid(ShortUrlGenerator.generateShortUuid());
+		User u = product.getCreator();
+		RegisterApply apply = u.getRegisterApply();
+		String uuid = ShortUrlGenerator.generateShortUuid();
+		uuid = apply.getId() + "L" + uuid;
+		product.setUuid(uuid);
     	productService.add(product);
         jsonResult.setMessage(getI18NMessage(request, "base.common.controller.operate.add.success"));
         return jsonResult;

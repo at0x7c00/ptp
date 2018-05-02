@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import me.huqiao.smallcms.sys.entity.enumtype.UserStatus;
+import me.huqiao.smallcms.trace.entity.RegisterApply;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -84,6 +85,8 @@ public class User {
 
 	private Date thisLoginTime;
 	private Date lastLoginTime;
+	
+	private RegisterApply registerApply;
 
 	@Id
 	@GeneratedValue(generator = "userName_generator")
@@ -426,5 +429,17 @@ public class User {
 		lastLoginTime = thisLoginTime;
 		thisLoginTime = date;
 	}
+
+	@ManyToOne(targetEntity = RegisterApply.class)
+	@JoinColumn(name = "register_apply", nullable = true)
+	@Fetch(FetchMode.SELECT)
+	public RegisterApply getRegisterApply() {
+		return registerApply;
+	}
+
+	public void setRegisterApply(RegisterApply registerApply) {
+		this.registerApply = registerApply;
+	}
+	
 	
 }

@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>用户登录-${systemTitle}</title>
+		<title>密码找回-${systemTitle}</title>
 		<meta name="description" content="">
 		<meta name="author" content="">
 
@@ -28,15 +28,10 @@
 		</div>
 	
 		<div class="login-form">
-			<h1>账号密码登录</h1>
+			<h1>密码找回</h1>
 			<div class="form-input">
 				<label class="label user"></label>
 				<input type="text" name="username" placeholder="手机号/用户名" class="blod"/>
-			</div>
-			
-			<div class="form-input">
-				<label class="label lock"></label>
-				<input type="text" name="password" placeholder="密码" class="blod"/>
 			</div>
 			
 			<div class="form-input">
@@ -44,18 +39,9 @@
 				<input type="text" name="ckCode" placeholder="动态码" class="blod half"/>
 				<a href="#" class="button blod" style="width:110px;float:right;">获取动态码</a>
 			</div>
-			<div class="form-input">
-				<a href="${basePath}register.do">
-				注册账号
-				</a>
-				
- 				<a href="${basePath}iforget.do" style="float:right;" target="_blank">
-				忘记密码
-				</a>
-			</div>
 			
 			<div class="form-input" style="text-align:center;">
-				<a href="#" class="button blod" style="width:110px;">确认登录</a>
+				<a href="#" class="button blod" style="width:110px;">确&nbsp;认</a>
 			</div>
 		</div>
 	

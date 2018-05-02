@@ -9,7 +9,9 @@ import me.huqiao.smallcms.util.Constants;
 import me.huqiao.smallcms.util.web.LoginInfo;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -31,6 +33,35 @@ public class FrontendContrller{
 			return "redirect:/loginUI.do";
     	}
     	return null;
+	}
+	
+	@RequestMapping(value = "/register",method = RequestMethod.GET)
+	public void registerUI(){
+		
+	}
+	
+	@RequestMapping(value = "/register",method = RequestMethod.POST)
+	public String register(){
+		
+		return "registerSuccess";
+	}
+	
+	
+	@RequestMapping(value = "/iforget",method = RequestMethod.GET)
+	public void iforgetUI(){
+		
+	}
+	
+	@RequestMapping(value = "/iforget",method = RequestMethod.POST)
+	public String iforget(){
+		
+		return "registerSuccess";
+	}
+	
+	@RequestMapping(value = "/query/{uuid}")
+	public String query(@PathVariable(value = "uuid")String uuid){
+		
+		return "query";
 	}
 	
 	

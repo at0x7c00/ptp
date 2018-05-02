@@ -41,12 +41,14 @@ div.footer p{
 	padding:2px;
 	text-align:center;
 }
-div.login-wrapper{
+div.wrapper{
 	margin-top:30px;
 	border:1px solid #b2b2b2;
 	height:349px;
-	background: url(./img/keyboard.png) no-repeat left center;
 	position:relative;
+}
+div.wrapper.login{
+	background: url(./img/keyboard.png) no-repeat left center;
 }
 div.sys-title{
 	height:85px;
