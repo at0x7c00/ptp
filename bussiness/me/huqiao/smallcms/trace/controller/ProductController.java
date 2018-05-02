@@ -23,6 +23,7 @@ import me.huqiao.smallcms.trace.entity.enumtype.ProductStatus;
 import me.huqiao.smallcms.trace.entity.propertyeditor.CategoryEditor;
 import me.huqiao.smallcms.trace.service.ICategoryService;
 import me.huqiao.smallcms.trace.service.IProductService;
+import me.huqiao.smallcms.trace.util.ShortUrlGenerator;
 import me.huqiao.smallcms.util.Md5Util;
 import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
@@ -178,6 +179,7 @@ public class ProductController  extends BaseController {
 		product.getOtherQualifications().addAll(otherQualificationseys);
 		
 		product.setManageKey(Md5Util.getManageKey());
+		product.setUuid(ShortUrlGenerator.generateShortUuid());
     	productService.add(product);
         jsonResult.setMessage(getI18NMessage(request, "base.common.controller.operate.add.success"));
         return jsonResult;

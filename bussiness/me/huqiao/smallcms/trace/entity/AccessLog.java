@@ -43,6 +43,9 @@ private Date accessTimeStart;
 private Date accessTimeEnd;
 /**会话ID*/
 private String sessionID;
+
+private String productId;
+
 	/**MD5管理ID*/
 	protected String manageKey;
 	/**@return String MD5管理ID */
@@ -176,4 +179,13 @@ public String getSessionID(){
 	public String toString() {
 		return "AccessLog [manageKey=" + manageKey + "]";
 	}
+	
+	@Column(name = "product_id",nullable = true)
+	public String getProductId() {
+		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+	
 }

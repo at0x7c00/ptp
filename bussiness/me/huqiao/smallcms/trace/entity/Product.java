@@ -16,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -28,8 +27,6 @@ import me.huqiao.smallcms.trace.entity.enumtype.ProductStatus;
 import me.huqiao.smallcms.util.Md5Util;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -105,6 +102,9 @@ private User creator;
 private String creatorQuery;
 	/**MD5管理ID*/
 	protected String manageKey;
+	
+	private String uuid;
+	
 	/**@return String MD5管理ID */
 	public String getManageKey() {
 		return manageKey;
@@ -566,4 +566,15 @@ public String getCreatorQuery(){
 	public String toString() {
 		return "Product [manageKey=" + manageKey + "]";
 	}
+	
+	@Column(name="_uuid",nullable = true)
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	
+	
 }
