@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="app_preset_prof_preset_name">PrivilegeValidateInterceptor Launch Configuration</entry>
+<entry key="profiler.settings.sampling.interval">10</entry>
+<entry key="app_preset_prof_preset_filter_s"/>
+<entry key="app_preset_prof_preset_filter_p">me.huqiao.smallcms.asset.configuration.controller.*,&#13;
+me.huqiao.smallcms.asset.configuration.dao.*,&#13;
+me.huqiao.smallcms.asset.configuration.entity.*,&#13;
+me.huqiao.smallcms.asset.configuration.service.*,&#13;
+me.huqiao.smallcms.asset.manage.ci.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.ci.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.ci.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.ci.service.*,&#13;
+me.huqiao.smallcms.asset.manage.datacenterdevice.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.datacenterdevice.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.datacenterdevice.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.datacenterdevice.service.*,&#13;
+me.huqiao.smallcms.asset.manage.functionci.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.functionci.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.functionci.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.functionci.service.*,&#13;
+me.huqiao.smallcms.asset.manage.material.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.material.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.material.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.material.service.*,&#13;
+me.huqiao.smallcms.asset.manage.networkdevice.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.networkdevice.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.networkdevice.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.networkdevice.service.*,&#13;
+me.huqiao.smallcms.asset.manage.physicaldevice.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.physicaldevice.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.physicaldevice.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.physicaldevice.service.*,&#13;
+me.huqiao.smallcms.asset.manage.software.controller.*,&#13;
+me.huqiao.smallcms.asset.manage.software.dao.*,&#13;
+me.huqiao.smallcms.asset.manage.software.entity.*,&#13;
+me.huqiao.smallcms.asset.manage.software.service.*,&#13;
+me.huqiao.smallcms.common.controller.*,&#13;
+me.huqiao.smallcms.common.dao.*,&#13;
+me.huqiao.smallcms.common.entity.*,&#13;
+me.huqiao.smallcms.common.service.*,&#13;
+me.huqiao.smallcms.deployment.manage.controller.*,&#13;
+me.huqiao.smallcms.deployment.manage.dao.*,&#13;
+me.huqiao.smallcms.deployment.manage.entity.*,&#13;
+me.huqiao.smallcms.deployment.manage.service.*,&#13;
+me.huqiao.smallcms.history.entity.*,&#13;
+me.huqiao.smallcms.i18n.*,&#13;
+me.huqiao.smallcms.interceptor.*,&#13;
+me.huqiao.smallcms.listener.*,&#13;
+me.huqiao.smallcms.servlet.*,&#13;
+me.huqiao.smallcms.sys.controller.*,&#13;
+me.huqiao.smallcms.sys.dao.*,&#13;
+me.huqiao.smallcms.sys.entity.*,&#13;
+me.huqiao.smallcms.sys.service.*,&#13;
+me.huqiao.smallcms.tag.fns.*,&#13;
+me.huqiao.smallcms.taglib.*,&#13;
+me.huqiao.smallcms.ticket.configuration.controller.*,&#13;
+me.huqiao.smallcms.ticket.configuration.dao.*,&#13;
+me.huqiao.smallcms.ticket.configuration.entity.*,&#13;
+me.huqiao.smallcms.ticket.configuration.service.*,&#13;
+me.huqiao.smallcms.ticket.manage.controller.*,&#13;
+me.huqiao.smallcms.ticket.manage.dao.*,&#13;
+me.huqiao.smallcms.ticket.manage.entity.*,&#13;
+me.huqiao.smallcms.ticket.manage.service.*,&#13;
+me.huqiao.smallcms.util.*,&#13;
+com.novots.itsm.util.threadlocal.*</entry>
+<entry key="profiler.settings.n.profiled.threads.limit">32</entry>
+<entry key="app_preset_prof_preset_alloc_p">10</entry>
+<entry key="profiler.settings.instrument.method.invoke">true</entry>
+<entry key="app_preset_"/>
+<entry key="profiler.settings.obj.alloc.stack.sampling.depth">0</entry>
+<entry key="app_preset_prof_preset_samplingRefreshRate_s">1000</entry>
+<entry key="app_preset_prof_preset_stacks_p">false</entry>
+<entry key="app_preset_prof_preset_roots_p">me.huqiao.smallcms.asset.configuration.controller.**
+me.huqiao.smallcms.asset.configuration.dao.**
+me.huqiao.smallcms.asset.configuration.entity.**
+me.huqiao.smallcms.asset.configuration.service.**
+me.huqiao.smallcms.asset.manage.ci.controller.**
+me.huqiao.smallcms.asset.manage.ci.dao.**
+me.huqiao.smallcms.asset.manage.ci.entity.**
+me.huqiao.smallcms.asset.manage.ci.service.**
+me.huqiao.smallcms.asset.manage.datacenterdevice.controller.**
+me.huqiao.smallcms.asset.manage.datacenterdevice.dao.**
+me.huqiao.smallcms.asset.manage.datacenterdevice.entity.**
+me.huqiao.smallcms.asset.manage.datacenterdevice.service.**
+me.huqiao.smallcms.asset.manage.functionci.controller.**
+me.huqiao.smallcms.asset.manage.functionci.dao.**
+me.huqiao.smallcms.asset.manage.functionci.entity.**
+me.huqiao.smallcms.asset.manage.functionci.service.**
+me.huqiao.smallcms.asset.manage.material.controller.**
+me.huqiao.smallcms.asset.manage.material.dao.**
+me.huqiao.smallcms.asset.manage.material.entity.**
+me.huqiao.smallcms.asset.manage.material.service.**
+me.huqiao.smallcms.asset.manage.networkdevice.controller.**
+me.huqiao.smallcms.asset.manage.networkdevice.dao.**
+me.huqiao.smallcms.asset.manage.networkdevice.entity.**
+me.huqiao.smallcms.asset.manage.networkdevice.service.**
+me.huqiao.smallcms.asset.manage.physicaldevice.controller.**
+me.huqiao.smallcms.asset.manage.physicaldevice.dao.**
+me.huqiao.smallcms.asset.manage.physicaldevice.entity.**
+me.huqiao.smallcms.asset.manage.physicaldevice.service.**
+me.huqiao.smallcms.asset.manage.software.controller.**
+me.huqiao.smallcms.asset.manage.software.dao.**
+me.huqiao.smallcms.asset.manage.software.entity.**
+me.huqiao.smallcms.asset.manage.software.service.**
+me.huqiao.smallcms.common.controller.**
+me.huqiao.smallcms.common.dao.**
+me.huqiao.smallcms.common.entity.**
+me.huqiao.smallcms.common.service.**
+me.huqiao.smallcms.deployment.manage.controller.**
+me.huqiao.smallcms.deployment.manage.dao.**
+me.huqiao.smallcms.deployment.manage.entity.**
+me.huqiao.smallcms.deployment.manage.service.**
+me.huqiao.smallcms.history.entity.**
+me.huqiao.smallcms.i18n.**
+me.huqiao.smallcms.interceptor.**
+me.huqiao.smallcms.listener.**
+me.huqiao.smallcms.servlet.**
+me.huqiao.smallcms.sys.controller.**
+me.huqiao.smallcms.sys.dao.**
+me.huqiao.smallcms.sys.entity.**
+me.huqiao.smallcms.sys.service.**
+me.huqiao.smallcms.tag.fns.**
+me.huqiao.smallcms.taglib.**
+me.huqiao.smallcms.ticket.configuration.controller.**
+me.huqiao.smallcms.ticket.configuration.dao.**
+me.huqiao.smallcms.ticket.configuration.entity.**
+me.huqiao.smallcms.ticket.configuration.service.**
+me.huqiao.smallcms.ticket.manage.controller.**
+me.huqiao.smallcms.ticket.manage.dao.**
+me.huqiao.smallcms.ticket.manage.entity.**
+me.huqiao.smallcms.ticket.manage.service.**
+me.huqiao.smallcms.util.**
+com.novots.itsm.util.threadlocal.**
+</entry>
+<entry key="profiler.settings.instrument.empty.methods">false</entry>
+<entry key="myeclipse.profiling.mode">0</entry>
+<entry key="profiler.settings.istrument.getter.setter.methods">false</entry>
+<entry key="app_preset_prof_preset_samplingRate_s">100</entry>
+<entry key="profiler.settings.instr.scheme">1</entry>
+<entry key="profiler.settings.cpu.profiling.type">0</entry>
+<entry key="app_preset_prof_preset_selector"/>
+<entry key="app_preset_prof_preset_filterMode_s">true</entry>
+<entry key="app_preset_prof_preset_runnables_p">true</entry>
+<entry key="app_preset_prof_preset_refreshRate_s">1000</entry>
+<entry key="app_preset_prof_preset_filterMode_p">false</entry>
+<entry key="app_preset_prof_preset_memoryMode_p">true</entry>
+</properties>

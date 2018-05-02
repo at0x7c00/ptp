@@ -1,0 +1,132 @@
+* {
+font-family: "SourceHanSansCN-Regular","Microsoft YaHei";
+}
+a{
+	text-decoration: none;
+	color:#1266b6;
+}
+a:hover{
+	text-decoration: underline;
+	color:#1266b6;
+} 
+body{
+	margin:0px;
+	margin-bottom:5px;
+	padding:0px;
+	font-size:12px;
+}
+div.main{
+	width:1180px;
+	border:0px dashed red;
+	margin:auto;
+}
+div.sys-header>div.logo{
+	background:url(./img/logo.png) no-repeat center top;
+	height:55px;
+	width:435px;
+	margin:12px 0px;
+}
+div.sys-header{
+	border-bottom:0px solid #b2b2b2;
+}
+div.line{
+	height:1px;
+	background:url(./img/border-bg.png) repeat-x;
+}
+div.footer{
+	margin-top:30px;
+}
+div.footer p{
+	margin:0px;
+	padding:2px;
+	text-align:center;
+}
+div.login-wrapper{
+	margin-top:30px;
+	border:1px solid #b2b2b2;
+	height:349px;
+	background: url(./img/keyboard.png) no-repeat left center;
+	position:relative;
+}
+div.sys-title{
+	height:85px;
+	width:420px;
+	border:0px solid red;
+	margin:auto;
+	background: url(./img/title.png) no-repeat left center;
+}
+div.login-form{
+	width:320px;
+	height:300px;
+	border:0px solid red;
+	position:absolute;
+	right:80px;
+	top:40px;
+}
+
+.login-form>h1{
+	border-bottom:1px solid #b7d1e9;
+	font-size:21px;
+	letter-spacing: 2px;
+	padding-bottom:10px;
+	text-align:center;
+}
+.form-input{
+	margin-top:16px;
+	border:0px solid #ddd;
+	height:32px;
+	padding:0px;
+}
+.form-input>label{
+	height:30px;
+	width:32px;
+	display:inline-block;
+}
+.form-input>label.user{
+	background: url(./img/pre-user.png)no-repeat center;
+}
+
+.form-input>label.lock{
+	background: url(./img/pre-lock.png)no-repeat center;
+}
+
+.form-input>label.key{
+	background: url(./img/pre-key.png)no-repeat center;
+}
+.form-input>input{
+	border-top:1px solid #1366b6;
+	border-bottom:1px solid #1366b6;
+	border-right:1px solid #1366b6;
+	border-left:0px;
+	height:26px;
+	width:275px;
+	padding-left:10px;
+	border-radius:0px 3px 3px 0px;
+}
+.form-input>input.half{
+	width:140px;
+}
+.form-input>input,.form-input>label{
+	float:left;
+}
+a.button:hover{
+	text-decoration: none;
+	color:#fff;
+	background: #2377c7;
+}
+.button{
+	border-radius:3px;
+	background:#1266b6;
+	text-decoration: none;
+	height:30px;
+	line-height:30px;
+	padding:0px 10px;
+	color:#fff;
+	display:inline-block;
+	margin:0px 0px;
+	text-align: center;
+	letter-spacing: 1px;
+}
+.blod{
+	font-weight: 550;
+}
