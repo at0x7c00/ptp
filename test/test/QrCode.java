@@ -13,6 +13,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QrCode {
 
@@ -28,16 +29,18 @@ public class QrCode {
 	    try {
 	        // 需要引入core包
 	        QRCodeWriter writer = new QRCodeWriter();
-	 
+	        
 	        //Log.i(TAG, "生成的文本：" + text);
 	        if (text == null || "".equals(text) || text.length() < 1) {
 	            return null;
 	        }
 	 
-	        Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
+	        Hashtable<EncodeHintType, Comparable> hints = new Hashtable<EncodeHintType, Comparable>();
 	        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+	        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+	        hints.put(EncodeHintType.MARGIN,2);
 	        //比特矩阵
-	        BitMatrix bitMatrix = new QRCodeWriter().encode(text,
+	        BitMatrix bitMatrix = writer.encode(text,
 	                BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints);
 	        int[] pixels = new int[QR_WIDTH * QR_HEIGHT];
 	        //比特矩阵转颜色数组
@@ -51,7 +54,7 @@ public class QrCode {
 	                    image.setRGB(x, y, black);
 	                } else {
 	                    pixels[y * QR_WIDTH + x] = 0x00ffffff;//透明点,白点为0xffffffff
-	                    //image.setRGB(x, y, white);
+	                    image.setRGB(x, y, white);
 	                }
 	 
 	            }
