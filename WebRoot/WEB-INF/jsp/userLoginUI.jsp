@@ -21,7 +21,7 @@
 	<div class="main">
 	<%@include file="/WEB-INF/jsp/frontend/header.jsp" %>
 	
-	<div class="wrapper login">
+	<div class="wrapper login ">
 	
 		<div class="sys-title">
 		
@@ -55,7 +55,7 @@
 			</div>
 			
 			<div class="form-input" style="text-align:center;">
-				<a href="#" class="button blod" style="width:110px;">确认登录</a>
+				<a href="#" class="button blod big" style="width:110px;">确认登录</a>
 			</div>
 		</div>
 	

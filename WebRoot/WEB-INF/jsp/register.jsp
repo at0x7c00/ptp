@@ -21,9 +21,87 @@
 	<div class="main">
 	<%@include file="/WEB-INF/jsp/frontend/header.jsp" %>
 	
-	<div class="wrapper">
+	<div class="wrapper form"  style="padding-bottom:30px;">
 	
 		<div class="sys-title">
+		</div>
+		
+		<div style="width:730px;margin:auto;padding-top:30px;">
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>公司名称：</span>
+				<input type="text" name="" class="required blod"/>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>法人：</span>
+				<input type="text" name="" class="required blod"/>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>公司地址：</span>
+				<input type="text" name="" class="required blod"/>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>联系人：</span>
+				<input type="text" name="" class="required blod half"/>
+				
+				<span class="form-input-title"><em class="required">*</em>联系电话：</span>
+				<input type="text" name="" class="required blod half"/>
+			</div>
+			
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>E-mail：</span>
+				<input type="text" name="" class="required blod"/>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>营业执照：</span>
+				<a  class="btn_addPic" href="javascript:void(0);">
+					上传图片
+					<input type="file" name="" class="filePrew required blod"/>
+				</a>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>法人身份证：</span>
+				<a  class="btn_addPic" href="javascript:void(0);">
+					上传图片
+				<input type="file" name="" class="filePrew required blod"/>
+				</a>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">&nbsp;</em>其他资质：</span>
+				<a  class="btn_addPic" href="javascript:void(0);">
+					上传图片
+				<input type="file" name="" class="filePrew required blod"/>
+				</a>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>用户名：</span>
+				<input type="text" name="" class="required blod"/>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>密码：</span>
+				<input type="text" name="" class="required blod"/>
+			</div>
+			
+			<div class="form-input">
+				<span class="form-input-title"><em class="required">*</em>手机号：</span>
+				<input type="text" name="" class="required blod" style="width:250px"/>
+				
+				<a href="#" class="button blod" style="width:110px;float:left;margin-left:20px;">获取动态码</a>
+			</div>
+			
+			
+			<div class="form-input" style="text-align:center;">
+				<a href="#" class="button blod big" style="width:110px;">提交</a>
+			</div>
+			
 		</div>
 	
 	</div>

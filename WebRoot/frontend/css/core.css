@@ -1,5 +1,5 @@
 * {
-font-family: "SourceHanSansCN-Regular","Microsoft YaHei";
+font-family: "Microsoft YaHei", "SourceHanSansCN-Regular";
 }
 a{
 	text-decoration: none;
@@ -129,6 +129,76 @@ a.button:hover{
 	text-align: center;
 	letter-spacing: 1px;
 }
+.button.big{
+	height:40px;
+	line-height:40px;
+}
 .blod{
 	font-weight: 550;
 }
+
+.form-input-title{
+	display: inline-block;
+    float: left;
+    height: 26px;
+    line-height: 31px;
+    min-width: 110px;
+    font-weight:550;
+    letter-spacing: 1px;
+    font-size:14px;
+}
+.form-input>.form-input-title+input{
+	border:1px solid gray;
+	width:500px;
+}
+.form-input>.form-input-title+input.half{
+	width:189px;
+}
+.form-input-title>em.required{
+	color:red;
+	margin-right:3px;
+}
+.wrapper.form{
+	height:auto;
+	min-height:350px;
+}
+
+
+.btn_addPic{ 
+display: block; 
+position: relative; 
+width: 400px; 
+height: 26px; 
+line-height: 26px;
+overflow: hidden; 
+border: 1px solid #EBEBEB; 
+/*background: none repeat scroll 0 0 #F3F3F3;*/ 
+color: #999999; 
+cursor: pointer; 
+text-align: left; 
+border:0px;
+color:blue;
+} 
+.btn_addPic span{display: block;line-height: 26px;} 
+.btn_addPic em { 
+display: inline-block; 
+width: 18px; 
+height: 18px; 
+overflow: hidden; 
+margin: 10px 5px 10px 0; 
+line-height: 20em; 
+vertical-align: middle; 
+} 
+.btn_addPic:hover em{background-position:-19px 0;} 
+.filePrew { 
+display: block; 
+position: absolute; 
+top: 0; 
+left: 0; 
+width: 400px; 
+height: 26px; 
+line-height: 26px;
+font-size: 100px; /* 增大不同浏览器的可点击区域 */ 
+opacity: 0; /* 实现的关键点 */ 
+filter:alpha(opacity=0);/* 兼容IE */ 
+} 
