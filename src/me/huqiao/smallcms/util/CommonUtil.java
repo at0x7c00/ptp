@@ -1,5 +1,7 @@
 package me.huqiao.smallcms.util;
 
+import java.util.Random;
+
 
 
 
@@ -9,6 +11,7 @@ package me.huqiao.smallcms.util;
  * @version Version 1.0
  */
 public class CommonUtil {
+	
 
     
 	/**
@@ -22,5 +25,16 @@ public class CommonUtil {
         else 
             return true;
     }
-  
+    
+    public static String createCheckCode(){
+    	StringBuffer s = new StringBuffer();
+    	Random r = new Random();
+		int i = 0;
+		while(i<6){
+			s.append(r.nextInt(10));
+			i++;
+		}
+		return s.toString();
+    }
+    
 }

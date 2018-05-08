@@ -11,14 +11,14 @@ import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 /**
- * 访问日志
+ * 操作日志
  * @author NOVOTS
  * @version Version 1.0
  */
 @Entity
-@Table(name="trace_access_log")
+@Table(name="trace_operate_log")
 @JsonIgnoreProperties( value={"hibernateLazyInitializer","handler"})
-public class AccessLog{
+public class OperateLog{
 	/**唯一识别ID号 */
 	protected Integer id;
 	/**@param id 要设置的唯一标示号*/
@@ -30,20 +30,14 @@ public class AccessLog{
 	public Integer getId(){return this.id;}
 	/**IP*/
 	private String ip;
-	/**访问页面*/
-	private String page;
-	/**userID*/
+	private String description;
+	private String operate;
+	private String type;
 	private String userID;
-	/**访问时间*/
-	private Date accessTime;
-		/**访问时间开始，用于查询*/
-	private Date accessTimeStart;
-		/**访问时间结束，用于查询*/
-	private Date accessTimeEnd;
-	/**会话ID*/
+	private Date operateTime;
+	private Date operateTimeStart;
+	private Date operateTimeEnd;
 	private String sessionID;
-	
-	private String productId;
 
 	/**MD5管理ID*/
 	protected String manageKey;
@@ -71,19 +65,6 @@ public String getIp(){
 		return this.ip;	
 }
 /**
- * @param page 要设置的访问页面
- */
-public void setPage(String page){
-    this.page = page;
-}
-/**
- * @return String 访问页面 
- */
-@Column(name="page",length=255,nullable=true)
-public String getPage(){
-		return this.page;	
-}
-/**
  * @param userID ��设置的userID
  */
 public void setUserID(String userID){
@@ -95,45 +76,6 @@ public void setUserID(String userID){
 @Column(name="user_id",length=255,nullable=true)
 public String getUserID(){
 		return this.userID;	
-}
-/**
- * @param accessTime 要设置的访问时间
- */
-public void setAccessTime(Date accessTime){
-    this.accessTime = accessTime;
-}
-/**
- * @return Date 访问时间 
- */
-@Column(name="access_time",nullable=true)
-public Date getAccessTime(){
-		return this.accessTime;	
-}
-/**
-  * @param accessTimeStart 要设置的访问时间开始日期
-  */
-public void setAccessTimeStart(Date accessTimeStart){
-    this.accessTimeStart = accessTimeStart;
-}
-/**
-  * @return Date 访问时间开始日期
-  */
-@Transient
-public Date getAccessTimeStart(){
-    return this.accessTimeStart;
-}
-/**
-  * @param accessTimeEnd 要设置的访问时间结束日期
-  */
-public void setAccessTimeEnd(Date accessTimeEnd){
-    this.accessTimeEnd = accessTimeEnd;
-}
-/**
-  * @return Date 访问时间结束日期
-  */
-@Transient
-public Date getAccessTimeEnd(){
-    return this.accessTimeEnd;
 }
 /**
  * @param sessionID 要设置的会话ID
@@ -154,9 +96,9 @@ public String getSessionID(){
 			return true;
 		if (obj == null)
 			return false;
-		AccessLog other = null;
+		OperateLog other = null;
 		try{
-			other = (AccessLog) obj;
+			other = (OperateLog) obj;
 		}catch(Exception e){
 			return false;
 		}
@@ -179,12 +121,47 @@ public String getSessionID(){
 		return "AccessLog [manageKey=" + manageKey + "]";
 	}
 	
-	@Column(name = "product_id",nullable = true)
-	public String getProductId() {
-		return productId;
+	@Column(name = "description",nullable=true)
+	public String getDescription() {
+		return description;
 	}
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	@Column(name = "operate_time",nullable = true)
+	public Date getOperateTime() {
+		return operateTime;
+	}
+	public void setOperateTime(Date operateTime) {
+		this.operateTime = operateTime;
 	}
 	
+	@Column(name = "type",nullable = true)
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	@Transient
+	public Date getOperateTimeStart() {
+		return operateTimeStart;
+	}
+	public void setOperateTimeStart(Date operateTimeStart) {
+		this.operateTimeStart = operateTimeStart;
+	}
+	@Transient
+	public Date getOperateTimeEnd() {
+		return operateTimeEnd;
+	}
+	public void setOperateTimeEnd(Date operateTimeEnd) {
+		this.operateTimeEnd = operateTimeEnd;
+	}
+	public String getOperate() {
+		return operate;
+	}
+	public void setOperate(String operate) {
+		this.operate = operate;
+	}
 }

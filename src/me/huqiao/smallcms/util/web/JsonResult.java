@@ -215,4 +215,7 @@ public class JsonResult {
 		return res;
 	}
 
+	public boolean isOK(){
+		return getStatusCode().equals(STATUS_CODE_OK);
+	}
 }
