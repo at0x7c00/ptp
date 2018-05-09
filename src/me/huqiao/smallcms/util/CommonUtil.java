@@ -37,4 +37,12 @@ public class CommonUtil {
 		return s.toString();
     }
     
+    public static String replaceMobileNumberToStarts(String num){
+    	int len = num.length();
+    	String prefix = num.substring(0,len>3 ? 3 : len);
+    	
+    	String end = num.substring(len - (len>4 ? 4 : len));
+    	return prefix + "****" + end;
+    }
+    
 }

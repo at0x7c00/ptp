@@ -70,7 +70,7 @@ public class OperateLogServiceImpl extends BaseServiceImpl<OperateLog> implement
 	}
 	@Override
 	public boolean timeValidate(String number,Long secondsAgo) {
-		return operateLogDao.existedBefore(number,DateUtil.datePlus(new Date(), Calendar.SECOND, -secondsAgo.intValue()));
+		return !operateLogDao.existedBefore(number,DateUtil.datePlus(new Date(), Calendar.SECOND, -secondsAgo.intValue()));
 	}
 	
 	@Override

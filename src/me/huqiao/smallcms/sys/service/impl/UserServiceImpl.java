@@ -17,6 +17,7 @@ import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.sys.service.IConfigService;
 import me.huqiao.smallcms.sys.service.IRoleService;
 import me.huqiao.smallcms.sys.service.IUserService;
+import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.springframework.stereotype.Service;
@@ -107,6 +108,18 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 	@Override
 	public List<User> queryById(String[] userNames) {
 		return userDao.findListByUserName(userNames);
+	}
+
+	@Override
+	public User findByUsernameOfPhonenumber(String username, String number) {
+		User user = null;
+		if(StringUtil.isNotEmpty(username)){
+			user = getById(User.class,username);
+		}
+		if(user==null && StringUtil.isNotEmpty(number)){
+			user = getEntityByProperty(User.class, "phone", number);
+		}
+		return user;
 	}
 	
 }

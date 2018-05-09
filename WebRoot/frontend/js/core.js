@@ -1,10 +1,74 @@
 $(function(){
 	
+	$("img.vcode").attr("title","点击换一个").click(function(){
+		var _this = $(this);
+		var url = _this.attr("oldsrc");
+		if(!url){
+			url = _this.attr("src");
+			_this.attr("oldsrc",url);
+		}
+		if(url.indexOf("?")>0){
+			url += "&";
+		}else{
+			url += "?";
+		}
+		url += "_t=" + new Date().getTime();
+		_this.attr("src",url);
+	});
 	
+	$(".codegeter").click(function(){
+		var _this = $(this);
+		if(_this.hasClass("unuseable")){
+			return;
+		}
+		
+		var type = _this.data("type");
+		var username = $(_this.data("username")).val()+"";
+		var vcode = $(_this.data("vcode")).val()+"";
+		if(username.isEmpty()){
+			toastr['info']("请输入手机号/用户名!");
+			return;
+		}
+		if(vcode.isEmpty()){
+			toastr['info']("请输入验证码!");
+			return;
+		}
+		
+		_this.addClass("unuseable");
+		$.ajax({
+			method:"get",
+			url:basePath + "code.do?for=" + type + "&username=" + username + "&vcode=" + vcode,
+			success:function(d){
+				$("img.vcode").trigger("click");
+				if(d.statusCode!='200'){
+					toastr["warning"](getCodeMsgs[d.message]);
+					_this.removeClass("unuseable");
+				}else{
+					toastr["info"]("动态码已发送至号码为" + d.message+"的手机");
+				}
+			},
+			error:function(xhr, ajaxOptions, thrownError){
+				toastr["error"]("Http status: " + xhr.status + " " + xhr.statusText + "\najaxOptions: " + ajaxOptions + "\nthrownError:"+thrownError + "\n" +xhr.responseText);
+				_this.removeClass("unuseable");
+			}
+		});
+	});
 	
 });
 
+function disableWithTimeLimit(){
+	
+}
 
+var getCodeMsgs = {};
+getCodeMsgs["Time-too-short"   ]="您访问的太频繁了，请稍后再试";
+getCodeMsgs["IP-too-frequent"  ]="您的IP访问次数太多，请第二天再试";
+getCodeMsgs["Invalid-vcode"    ]="您输入的验证码有误";
+getCodeMsgs["User-not-found"   ]="您输入的用户名或手机号不存在";
+getCodeMsgs["Illegal-access"   ]="非法访问";
+getCodeMsgs["Wrong-number"     ]="您输入的电话号码有误";
+getCodeMsgs["Server-error"     ]="服务器异常";
+getCodeMsgs["OK"               ]="发送成功!";
 
 (function($){
 	/**
@@ -101,11 +165,17 @@ $(function(){
 		isPhone:function() {
 			return (new RegExp(/(^([0-9]{3,4}[-])?\d{3,8}(-\d{1,6})?$)|(^\([0-9]{3,4}\)\d{3,8}(\(\d{1,6}\))?$)|(^\d{3,8}$)/).test(this));
 		},
+		isMobileNum:function(){
+			return (new RegExp(/^1[3|4|5|6|7|8|9][0-9]{9}$/).test(this));
+		},
 		isUrl:function(){
 			return (new RegExp(/^[a-zA-z]+:\/\/([a-zA-Z0-9\-\.]+)([-\w .\/?%&=:]*)$/).test(this));
 		},
 		isExternalUrl:function(){
 			return this.isUrl() && this.indexOf("://"+document.domain) == -1;
+		},
+		isEmpty:function(){
+			return !this || this.trim()=='';
 		}
 	});
 })(jQuery);

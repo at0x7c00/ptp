@@ -60,4 +60,6 @@ public interface IUserService extends IBaseService<User> {
 	 */
 	List<User> queryById(String[] userNames);
 
+	public User findByUsernameOfPhonenumber(String username, String number);
+
 }

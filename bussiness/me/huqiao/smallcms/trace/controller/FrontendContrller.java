@@ -5,11 +5,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import me.huqiao.smallcms.servlet.VerifyImageServlet;
 import me.huqiao.smallcms.sms.service.ISMSService;
 import me.huqiao.smallcms.sms.service.impl.SMSServiceImpl;
 import me.huqiao.smallcms.sys.entity.User;
+import me.huqiao.smallcms.sys.service.IUserService;
 import me.huqiao.smallcms.trace.service.IOperateLogService;
+import me.huqiao.smallcms.util.CommonUtil;
 import me.huqiao.smallcms.util.Constants;
+import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.LoginInfo;
 
@@ -30,6 +34,8 @@ public class FrontendContrller{
 	private ISMSService smsService;
 	@Resource
 	private IOperateLogService operateLogService;
+	@Resource
+	private IUserService userService;
 	
 	@Value("${sm.limit.per.ip}")
 	private Integer ipLimitOfDay;
@@ -83,23 +89,39 @@ public class FrontendContrller{
 	
 	final static Long SECONDS_OF_ONE_MINUTE = 60l;
 	
-	@RequestMapping(value = "/code")
+	@RequestMapping(value = "/code",produces={"application/json"})
 	@ResponseBody
 	public JsonResult getCode(@RequestParam(value = "for")String forWhat,
-			@RequestParam(value = "number")String number,
+			@RequestParam(value = "number",required = false)String number,
+			@RequestParam(value = "username",required = false)String username,
+			@RequestParam(value = "vcode",required = false)String vcode,
 			HttpServletRequest request){
-		
 		JsonResult sendResult = null;
 		try{
+			//获取Code的验证
 			String ip = request.getRemoteHost();
 			if(!operateLogService.timeValidate(number,SECONDS_OF_ONE_MINUTE)){
-				operateLogService.addLog("WARN",ip,"getCode:"+number,"Time-too-short");
+				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.TIME_TOO_SHORT);
+				return JsonResult.error(GetCodeMsgs.TIME_TOO_SHORT);
 			}
 			if(!operateLogService.ipValidate(number,ipLimitOfDay)){
-				operateLogService.addLog("WARN",ip,"getCode:"+number,"IP-too-frequent");
+				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.IP_TOO_FREQUENT);
+				return JsonResult.error(GetCodeMsgs.IP_TOO_FREQUENT);
 			}
-			if(!pageVerifyCodeValidate(request)){
-				operateLogService.addLog("WARN",ip,"getCode:"+number,"Wrong number");
+			if(!pageVerifyCodeValidate(vcode,request)){
+				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.INVALID_VCODE);
+				return JsonResult.error(GetCodeMsgs.INVALID_VCODE);
+			}
+			
+			//为登录和密码找回查询用户信息
+			User user = null;
+			if("login".equals(forWhat) || "forget".equals(forWhat)){
+				user = userService.findByUsernameOfPhonenumber(username,number);
+				if(user==null){
+					operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.USER_NOT_FOUND);
+					return JsonResult.error(GetCodeMsgs.USER_NOT_FOUND);
+				}
+				number = user.getPhone();
 			}
 			
 			if("register".equals(forWhat)){
@@ -109,25 +131,27 @@ public class FrontendContrller{
 			}else if("forget".equals(forWhat)){
 				sendResult = smsService.sendForgetCheckCode(number);
 			}else{
-				return JsonResult.error("Illegal Access");
+				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.ILLEGAL_ACCESS);
+				return JsonResult.error(GetCodeMsgs.ILLEGAL_ACCESS);
 			}
 			if(sendResult.isOK()){
 				operateLogService.addLog("INFO",ip,"getCode:"+number,",code:"+sendResult.getMessage());
-				return JsonResult.success("OK");
+				return JsonResult.success(CommonUtil.replaceMobileNumberToStarts(number));
 			}else if(sendResult.getMessage().equals("isv.MOBILE_NUMBER_ILLEGAL")){
-				operateLogService.addLog("WARN",ip,"getCode:"+number,"Wrong number");
-				return JsonResult.error("Wrong-Number");
+				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.WRONG_NUMBER);
+				return JsonResult.error(GetCodeMsgs.WRONG_NUMBER);
 			}else{
 				operateLogService.addLog("ERROR",ip,"getCode:" + number,sendResult.getMessage() + ":" + SMSServiceImpl.Errors.get(sendResult.getMessage()));
-				return JsonResult.error("Server-Error");
+				return JsonResult.error(GetCodeMsgs.SERVER_ERROR);
 			}
 		}catch(Exception e){
 			return JsonResult.error("Exception");
 		}
 	}
 	
-    private boolean pageVerifyCodeValidate(HttpServletRequest request) {
-		return true;
+    private boolean pageVerifyCodeValidate(String vcode,HttpServletRequest request) {
+    	String vcodeInSession = (String)request.getSession().getAttribute(VerifyImageServlet.SIMPLE_CAPCHA_SESSION_KEY);
+		return StringUtil.isNotEmpty(vcodeInSession) && vcodeInSession.toLowerCase().equals(vcode.toLowerCase());
 	}
 
 	/**

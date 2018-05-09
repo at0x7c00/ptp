@@ -44,7 +44,7 @@ div.footer p{
 div.wrapper{
 	margin-top:30px;
 	border:1px solid #b2b2b2;
-	height:349px;
+	height:416px;
 	position:relative;
 }
 div.wrapper.login{
@@ -202,3 +202,19 @@ font-size: 100px; /* 增大不同浏览器的可点击区域 */
 opacity: 0; /* 实现的关键点 */ 
 filter:alpha(opacity=0);/* 兼容IE */ 
 } 
+
+img.vcode{
+	float:right;
+	cursor:pointer;
+}
+
+.codegeter.unuseable{
+	background: #ddd;
+	color: #666;
+    font-weight: normal;
+}
+.codegeter.unuseable:hover{
+	background: #ddd;
+	color: #666;
+    font-weight: normal;
+}

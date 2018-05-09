@@ -21,3 +21,8 @@
   </div>
 </div>
 </div>
+
+<script type="text/javascript" src="${basePath}js/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="${basePath}frontend/js/core.js"></script>
+<link rel="stylesheet" type="text/css" href="${basePath}js/toastr/toastr.min.css" />
+	<script type="text/javascript" src="${basePath}js/toastr/toastr.min.js"></script>

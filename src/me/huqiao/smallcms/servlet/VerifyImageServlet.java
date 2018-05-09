@@ -44,10 +44,15 @@ public class VerifyImageServlet extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException{
 		
+		boolean small = "small".equals(req.getParameter("type"));
 		//修改的信息在此
 		int num = 4;// 字符的多少
 		int ImageWidth = num * 35;//图片的宽
 		int ImageHeight = 65;//图片的高
+		if(small){
+			ImageHeight = 30;
+			ImageWidth = 130;
+		}
 		int line_left = 7;//从左上到右下的线条个数
 		int line_right = 8;//从右上到左下的线条个数
 
@@ -60,7 +65,7 @@ public class VerifyImageServlet extends HttpServlet {
 			for (int i = 0; i < num; i++) {
 				// 1.随机得到num个字母或数字
 				test += captchars[random.nextInt(car) + 1];
-				font = new Font("Fixedsys", Font.PLAIN, 40);
+				font = new Font("Fixedsys", Font.PLAIN, 40 - random.nextInt(10));
 			}
 		/*} else {
 			for (int i = 0; i < num; i++) {
@@ -91,20 +96,29 @@ public class VerifyImageServlet extends HttpServlet {
 
             graphics.setFont(font);
             graphics.setColor(this.getRandColor());
-            graphics.drawString(test, 10, 50);// 将字写到图片上
+            if(!small){
+            	graphics.drawString(test, 0, 30);// 将字写到图片上
+            }else{
+            	graphics.drawString(test, 20,30);// 将字写到图片上
+            }
 
-            TextLayout textTl = new TextLayout(test, new Font("Fixedsys",
-            		Font.PLAIN, 20), new FontRenderContext(null, true, false));// 获得字体一样的字，20是字体的大小
-            textTl.draw(graphics, 30, 60);// 对字体加投影，第二个是左右相距，越大越远，第三个参数是上下两层相距距离，越大越近
+            if(!small){
+	            TextLayout textTl = new TextLayout(test, new Font("Fixedsys",
+	            		Font.PLAIN, 20), new FontRenderContext(null, true, false));// 获得字体一样的字，20是字体的大小
+	            textTl.draw(graphics, 30, 60);// 对字体加投影，第二个是左右相距，越大越远，第三个参数是上下两层相距距离，越大越近
+            }
 
             int w = bi.getWidth();
             int h = bi.getHeight();
-            shear(graphics, w, h, c);// 使图片扭曲
+            if(!small){
+            	shear(graphics, w, h, c);// 使图片扭曲
+            }
 
+            if(!small){
             this.drawThickLine(graphics, 0, random.nextInt(ImageHeight) + 1,
             		ImageWidth, random.nextInt(ImageHeight) + 1, 4, getRandColor(
             				100, 200));// 加一道线
-
+            }
             // 从左上到右下加上多道干扰线
             graphics.setColor(getRandColor(160, 200));// 设置线条的颜色
             for (int i = 0; i < line_left; i++) {
