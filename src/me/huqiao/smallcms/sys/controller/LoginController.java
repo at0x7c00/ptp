@@ -113,7 +113,7 @@ public class LoginController extends BaseController {
     		String checkCodeInSession = (String)request.getSession().getAttribute(VerifyImageServlet.SIMPLE_CAPCHA_SESSION_KEY);
     		checkCodeInSession = checkCodeInSession==null ? null : checkCodeInSession.toLowerCase();
 
-     	if(!(checkcode!=null && checkcode.toLowerCase().equals(checkCodeInSession))){
+     	    if(!(checkcode!=null && checkcode.toLowerCase().equals(checkCodeInSession))){
     			mav.addObject("passwordError", "验证码输入错误!");
     			return mav;
     		} 
@@ -194,7 +194,6 @@ public class LoginController extends BaseController {
     	 session.setAttribute("___currentUser", user);
     	 //loginInfo.setTaskChecker(TaskFactory.getInstance().getChecker(session));
     	// Hibernate.initialize(user.getServiceTypeGroups());
-    	
     }
     
     
@@ -206,7 +205,11 @@ public class LoginController extends BaseController {
     	 session.removeAttribute(Constants.LOGIN_INFO_IN_SESSION);
     	 session.removeAttribute("NtlmHttpAuth");
     	 session.removeAttribute("princpalNameInSession");
+    	 String loginType = (String)session.getAttribute("____logintype");
     	 session.invalidate();
+    	 if("customer".equals(loginType)){
+    		 return "redirect:loginUI.do";
+    	 }
     	return "redirect:adminLoginUI.do";
     }
     

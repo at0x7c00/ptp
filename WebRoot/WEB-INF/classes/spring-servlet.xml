@@ -28,7 +28,7 @@
 	</bean>  
 	<mvc:annotation-driven/>
 	
-	<context:property-placeholder location="classpath:sms.properties" />
+	<context:property-placeholder location="classpath:sms.properties,classpath:application.properties" />
   	
   	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
   		 <property name="prefix" value="/WEB-INF/jsp/"/>

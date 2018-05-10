@@ -33,6 +33,7 @@ public class PrivilegeValidateInterceptor extends HandlerInterceptorAdapter {
     	"adminLoginUI.do",
     	"loginUI.do",// 登录界面
     	"login.do",// 登录 
+    	"ulogin.do",
     	"loginOut.do",// 退出
     	"auth.do",
     	"admin/index.do",
@@ -51,7 +52,8 @@ public class PrivilegeValidateInterceptor extends HandlerInterceptorAdapter {
     	"register.do",
     	"iforget.do",
     	"query/",
-    	"code.do"
+    	"code.do",
+    	"filee/frontendAdd.do"
 	};
 	private static final String[] urlsWithLogin = new String[] {// 只需要登录就能拥有的权限
 		"home.do",

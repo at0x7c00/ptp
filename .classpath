@@ -105,6 +105,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bitmap-library-1.4.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/aliyun-java-sdk-core-3.3.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jmimemagic-0.1.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>

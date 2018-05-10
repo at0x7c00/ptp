@@ -46,7 +46,7 @@ public interface IOperateLogService extends IBaseService<OperateLog> {
 	 */
 	List<OperateLog> queryById(Integer[] ids);
 	
-	public void addLog(String string, String ip, String string2, String message);
+	public void addLog(String type, String ip, String operate, String description);
 	
 	public boolean timeValidate(String number,Long secondsAgo);
 	

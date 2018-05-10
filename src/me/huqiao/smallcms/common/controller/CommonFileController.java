@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -51,6 +53,10 @@ public class CommonFileController extends BaseController {
     /** 文件服务*/
 	@Resource
 	private ICommonFileService fileeService;
+	
+	@Value("${user.upload.size.limit}")
+	private Double userUploadSizeLimit;
+	
 	/**
 	  * 注册属性编辑器
 	  * @param binder 数据绑定器
@@ -120,22 +126,9 @@ public class CommonFileController extends BaseController {
 			@RequestParam(value = "userKey",required=false)String userKey,
             HttpServletRequest request) {
 		
-		//System.out.println("userKey=" + userKey);
-		//if(getCurrentUser()==null && (userKey==null || userKey.trim().equals("") || !MemoryStorage.getInstance().verifyUserkey(userKey))){
-		//	return "error";
-		//}
 		
 		folderId = folderId == null ? 1 : folderId;
 		
-		/*byte[] bytes = null;
-		
-		try {
-			bytes = photofile.getBytes();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			return new UploadResult(false,e1.getMessage());
-		}
-		*/
 		CommonFolder folder = commonFolderService.getById(CommonFolder.class, folderId);
 		CommonFile filee = new CommonFile();
 		filee.setCreateDate(new Date());
@@ -155,8 +148,38 @@ public class CommonFileController extends BaseController {
 		fileeService.add(filee);
 		return new UploadResult(true,filee.getManageKey());
 	}
-	
 
+	@RequestMapping(value = "/frontendAdd", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult frontendAdd(MultipartFile photofile,
+            HttpServletRequest request) {
+		
+		double mSize = (photofile.getSize()*1.0)/(1024*1024);
+		if(mSize>userUploadSizeLimit){
+			return JsonResult.error("FileSize-too-big");
+		}
+		if(!formatValidate(photofile.getContentType())){
+			return JsonResult.error("Format-error");
+		}
+		UploadResult res = add(photofile,1,null,request);
+		if(res.success){ 
+			return JsonResult.success(res.getFile_key());
+		}else{
+			return JsonResult.error(res.getFile_key());
+		}
+	}
+	
+	final static List<String> userUploadFileMimeTypes = Arrays.asList("image/png","image/jpg", "image/jpeg", "image/gif", "image/bmp");
+
+	private boolean formatValidate(String mimeType){
+		for(String type : userUploadFileMimeTypes){
+			if(type.equals(mimeType)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * 对话框添加附件
 	 * @param request HttpServletRequest对象

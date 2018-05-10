@@ -40,7 +40,7 @@
 				
 				<div class="form-input">
 					<label class="label key"></label>
-					<input type="text" name="vCode" placeholder="验证码" id="vcode" class="blod half"/>
+					<input type="text" name="vcode" placeholder="验证码" id="vcode" class="blod half"/>
 					<img alt="验证码" src="${basePath}verifyimage.create?type=small" class="vcode" />
 				</div>
 				
@@ -60,24 +60,54 @@
 				</div>
 				
 				<div class="form-input" style="text-align:center;">
-					<a href="#" id="submiter" class="button blod big" style="width:110px;">确认登录</a>
+					<a href="javascript:void(0);" id="submiter" class="button blod big" style="width:110px;">确认登录</a>
 				</div>
 			</div>
 		</form>
 	
 	</div>
-	<script type="text/javascript">
-	var basePath = '${basePath}';
-	</script>
 	<%@include file="/WEB-INF/jsp/frontend/footer.jsp" %>
 	</div>
     <script type="text/javascript">
     $(function(){
     	$("#submiter").click(function(){
-    		console.log($("input[name=username]").val().isMobileNum())
-    		if(!$("input[name=username]").val().isEmpty()){
-    			toastr['warning']("请输入用户名!");
+    		if($("input[name=username]").val().isEmpty()){
+    			toastr['warning']("请输入手机号或用户名!");
+    			return;
     		}
+    		if($("input[name=password]").val().isEmpty()){
+    			toastr['warning']("请输入密码!");
+    			return;
+    		}
+    		if($("input[name=vcode]").val().isEmpty()){
+    			toastr['warning']("请输入验证码!");
+    			return;
+    		}
+    		if($("input[name=ckCode]").val().isEmpty()){
+    			toastr['warning']("请输入动态码!");
+    			return;
+    		}
+    		
+    		var username = $("input[name=username]").val();
+    		var password = $("input[name=password]").val();
+    		var vcode = $("input[name=vcode]").val();
+    		var ckCode = $("input[name=ckCode]").val();
+    		$.ajax({
+    			method:"get",
+    			url:basePath + "ulogin.do?username=" + username + "&password=" + password + "&vcode=" + vcode + "&ckCode=" + ckCode,
+    			success:function(d){
+    				if(d.statusCode!='200'){
+    					toastr["warning"](getCodeMsgs[d.message]);
+	    				$("img.vcode").trigger("click");
+    				}else{
+    					toastr["info"]("登录成功!");
+    					window.location.href = basePath + "adminIndex.do";
+    				}
+    			},
+    			error:function(xhr, ajaxOptions, thrownError){
+    				toastr["error"]("Http status: " + xhr.status + " " + xhr.statusText + "\najaxOptions: " + ajaxOptions + "\nthrownError:"+thrownError + "\n" +xhr.responseText);
+    			}
+    		});
     	});
     });
     </script>

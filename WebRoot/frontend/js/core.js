@@ -1,5 +1,4 @@
 $(function(){
-	
 	$("img.vcode").attr("title","点击换一个").click(function(){
 		var _this = $(this);
 		var url = _this.attr("oldsrc");
@@ -23,13 +22,35 @@ $(function(){
 		}
 		
 		var type = _this.data("type");
-		var username = $(_this.data("username")).val()+"";
-		var vcode = $(_this.data("vcode")).val()+"";
-		if(username.isEmpty()){
+		
+		
+		
+		var usernameId = _this.data("username");
+		var username = "";
+		if(usernameId){
+			username = $(usernameId).val();
+		}
+		if(usernameId && username && username.isEmpty()){
 			toastr['info']("请输入手机号/用户名!");
 			return;
 		}
-		if(vcode.isEmpty()){
+		
+		var numberId = _this.data("number");
+		var number = "";
+		if(numberId){
+			number = $(numberId).val();
+		}
+		if(numberId && (!number || number.isEmpty())){
+			toastr['info']("请输入手机号!");
+			return;
+		}
+		if(numberId && (!number || !number.isMobileNum())){
+			toastr['info']("请输入正确的手机号码!");
+			return;
+		}
+		
+		var vcode = $(_this.data("vcode")).val();
+		if(!vcode || vcode.isEmpty()){
 			toastr['info']("请输入验证码!");
 			return;
 		}
@@ -37,31 +58,47 @@ $(function(){
 		_this.addClass("unuseable");
 		$.ajax({
 			method:"get",
-			url:basePath + "code.do?for=" + type + "&username=" + username + "&vcode=" + vcode,
+			url:basePath + "code.do?for=" + type + (username ? "&username=" + username :"") + "&vcode=" + vcode + (number ? "&number=" + number:""),
+			
 			success:function(d){
-				$("img.vcode").trigger("click");
 				if(d.statusCode!='200'){
 					toastr["warning"](getCodeMsgs[d.message]);
 					_this.removeClass("unuseable");
 				}else{
+					$("img.vcode").trigger("click");
 					toastr["info"]("动态码已发送至号码为" + d.message+"的手机");
+					disableWithTimeLimit(_this);
 				}
 			},
 			error:function(xhr, ajaxOptions, thrownError){
-				toastr["error"]("Http status: " + xhr.status + " " + xhr.statusText + "\najaxOptions: " + ajaxOptions + "\nthrownError:"+thrownError + "\n" +xhr.responseText);
+				ajaxError(xhr,ajaxOptions,thrownError);
 				_this.removeClass("unuseable");
 			}
 		});
 	});
 	
+	$("input[type=file]").h5Upload();
+	
 });
 
-function disableWithTimeLimit(){
-	
+function disableWithTimeLimit(vcode){
+	var i = 60;
+	vcode.attr("oldtext",vcode.html());
+	var x = window.setInterval(function(){
+		if(i>0){
+			vcode.html(i+"秒后重发");
+		}else{
+			vcode.removeClass("unuseable");
+			window.clearInterval(x);
+			vcode.html(vcode.attr("oldtext"));
+		}
+		i--;
+	},1000);
 }
 
 var getCodeMsgs = {};
 getCodeMsgs["Time-too-short"   ]="您访问的太频繁了，请稍后再试";
+getCodeMsgs["Time-too-long"    ]="动态码输入错误，或动态码已过期";
 getCodeMsgs["IP-too-frequent"  ]="您的IP访问次数太多，请第二天再试";
 getCodeMsgs["Invalid-vcode"    ]="您输入的验证码有误";
 getCodeMsgs["User-not-found"   ]="您输入的用户名或手机号不存在";
@@ -69,7 +106,18 @@ getCodeMsgs["Illegal-access"   ]="非法访问";
 getCodeMsgs["Wrong-number"     ]="您输入的电话号码有误";
 getCodeMsgs["Server-error"     ]="服务器异常";
 getCodeMsgs["OK"               ]="发送成功!";
+getCodeMsgs["FileSize-too-big" ]="您上传的文件超过规定的大小了";
+getCodeMsgs["Format-error"     ]="文件格式错误";
 
+function ajaxError(xhr, ajaxOptions, thrownError){
+	toastr["error"]("Http status: " + xhr.status + " " + xhr.statusText + "\najaxOptions: " + ajaxOptions + "\nthrownError:"+thrownError + "\n" +xhr.responseText);
+}
+function removeThisAtt(_this){
+	$(_this).parents(".atta-div").first().remove();
+}
+function imageView(key){
+	window.open(basePath + "filee/viewPic.do?manageKey=" + key,"_blank");
+}
 (function($){
 	/**
 	 * 扩展String方法

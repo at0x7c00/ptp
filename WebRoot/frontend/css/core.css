@@ -218,3 +218,29 @@ img.vcode{
 	color: #666;
     font-weight: normal;
 }
+.image-wrapper .atta-div{
+	width:102px;
+	height:102px;
+	border:1px solid #ddd;
+	display: inline-block;
+    margin: 0px 5px;
+}
+.image-wrapper .atta-div>img{
+	max-width:102px;
+	height:102px;
+	cursor:pointer;
+}
+.form-input.image-wrapper{
+	height:auto;
+	min-height:115px;
+	padding-left:110px;
+}
+
+.hide{
+	display: none;
+}
+div.atta-delete-div{
+	text-align:center;
+	color:red;
+	cursor:pointer;
+}
