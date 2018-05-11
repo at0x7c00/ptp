@@ -53,7 +53,9 @@ public class PrivilegeValidateInterceptor extends HandlerInterceptorAdapter {
     	"iforget.do",
     	"query/",
     	"code.do",
-    	"filee/frontendAdd.do"
+    	"filee/frontendAdd.do",
+    	"usernameValidate.do",
+    	"regDetail.do"
 	};
 	private static final String[] urlsWithLogin = new String[] {// 只需要登录就能拥有的权限
 		"home.do",

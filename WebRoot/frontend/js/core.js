@@ -65,7 +65,6 @@ $(function(){
 					toastr["warning"](getCodeMsgs[d.message]);
 					_this.removeClass("unuseable");
 				}else{
-					$("img.vcode").trigger("click");
 					toastr["info"]("动态码已发送至号码为" + d.message+"的手机");
 					disableWithTimeLimit(_this);
 				}
@@ -78,6 +77,133 @@ $(function(){
 	});
 	
 	$("input[type=file]").h5Upload();
+	
+	$("form .form-input>input.required").each(function(){
+		var _this = $(this);
+		_this.blur(function(){
+			var val = $(this).val();
+			if(!val || val.isEmpty()){
+				$(this).addClass("invalid");
+			}
+		}).focus(function(){
+			$(this).removeClass("invalid");
+		});
+	});
+	
+	$("form .form-input>input.email").each(function(){
+		var _this = $(this);
+		_this.blur(function(){
+			var val = $(this).val();
+			if(!val.isValidMail()){
+				$(this).addClass("invalid");
+			}
+		}).keyup(function(){
+			var val = $(this).val();
+			if(!val.isValidMail()){
+				$(this).addClass("invalid");
+			}else{
+				$(this).removeClass("invalid");
+			}
+		}).focus(function(){
+			$(this).removeClass("invalid");
+		});
+	});
+	$("form .form-input>input.phone").each(function(){
+		var _this = $(this);
+		_this.blur(function(){
+			var val = $(this).val();
+			if(!val.isPhone() && !val.isMobileNum()){
+				$(this).addClass("invalid");
+			}
+		}).keyup(function(){
+			var val = $(this).val();
+			if(!val.isPhone() && !val.isMobileNum()){
+				$(this).addClass("invalid");
+			}else{
+				$(this).removeClass("invalid");
+			}
+		}).focus(function(){
+			$(this).removeClass("invalid");
+		});
+	});
+	$("form .form-input>input.mobilenum").each(function(){
+		var _this = $(this);
+		_this.blur(function(){
+			var val = $(this).val();
+			if(!val.isMobileNum()){
+				$(this).addClass("invalid");
+			}
+		}).keyup(function(){
+			var val = $(this).val();
+			if(!val.isMobileNum()){
+				$(this).addClass("invalid");
+			}else{
+				$(this).removeClass("invalid");
+			}
+		}).focus(function(){
+			$(this).removeClass("invalid");
+		});
+	});
+	$("form .form-input>input.pwd").each(function(){
+		var _this = $(this);
+		_this.blur(function(){
+			var val = $(this).val();
+			if(!val.isValidPwd()){
+				$(this).addClass("invalid");
+			}
+		}).keyup(function(){
+			var val = $(this).val();
+			if(!val.isValidPwd()){
+				$(this).addClass("invalid");
+			}else{
+				$(this).removeClass("invalid");
+			}
+		}).focus(function(){
+			$(this).removeClass("invalid");
+		});
+	});
+	$("form .form-input>input.username").each(function(){
+		var _this = $(this);
+		_this.blur(function(){
+			var val = $(this).val();
+			if(!val.isUsername()){
+				$(this).addClass("invalid");
+			}
+		}).keyup(function(){
+			var val = $(this).val();
+			if(!val.isUsername()){
+				$(this).addClass("invalid");
+			}else{
+				$(this).removeClass("invalid");
+			}
+		}).focus(function(){
+			$(this).removeClass("invalid");
+		}).change(function(){
+			var val = $(this).val();
+			var _this = $(this);
+			$.ajax({
+				method:"get",
+				url:basePath + "usernameValidate.do?username=" + val,
+				success:function(d){
+					if(d.statusCode!='200'){
+						toastr["warning"]("服务器异常:"+d.message);
+					}else{
+						if(d.message=="OK"){
+							_this.removeClass("invalid");
+							toastr["success"]("该用户名可用！");
+						}else{
+							_this.addClass("invalid");
+							toastr["warning"]("该用户名已存在！");
+						}
+					}
+				},
+				error:function(xhr, ajaxOptions, thrownError){
+					ajaxError(xhr,ajaxOptions,thrownError);
+					_this.removeClass("unuseable");
+				}
+			});
+		});
+	});
 	
 });
 
@@ -108,6 +234,8 @@ getCodeMsgs["Server-error"     ]="服务器异常";
 getCodeMsgs["OK"               ]="发送成功!";
 getCodeMsgs["FileSize-too-big" ]="您上传的文件超过规定的大小了";
 getCodeMsgs["Format-error"     ]="文件格式错误";
+getCodeMsgs["Form-data-invalid"]="提交的数据不完整";
+getCodeMsgs["User-existed"     ]="您注册的用户名已存在";
 
 function ajaxError(xhr, ajaxOptions, thrownError){
 	toastr["error"]("Http status: " + xhr.status + " " + xhr.statusText + "\najaxOptions: " + ajaxOptions + "\nthrownError:"+thrownError + "\n" +xhr.responseText);
@@ -198,7 +326,7 @@ function imageView(key){
 			return this;
 		},
 		isValidPwd:function() {
-			return (new RegExp(/^([_]|[a-zA-Z0-9]){6,32}$/).test(this)); 
+			return (new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$/).test(this)); 
 		},
 		isValidMail:function(){
 			return(new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(this.trim()));
@@ -221,6 +349,10 @@ function imageView(key){
 		},
 		isExternalUrl:function(){
 			return this.isUrl() && this.indexOf("://"+document.domain) == -1;
+		},
+		isUsername:function(){
+			return (new RegExp(/^[a-zA-Z0-9_]{4,16}$/).test(this));
+			
 		},
 		isEmpty:function(){
 			return !this || this.trim()=='';

@@ -1,6 +1,9 @@
 package me.huqiao.smallcms.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.regex.Pattern;
+
+import sun.misc.Regexp;
 /**
  * 字符串工具类
  * @author NOVOTS
@@ -203,11 +206,6 @@ public class StringUtil {
     	
     }
  
-   public static void main(String[]args){
-	   System.out.println(formatNumAsFixLength(999,4));
-	   
-   }
-   
 	public static String htmlJsonSecuritify(String str){
 		if(str==null){
 			return "";
@@ -217,5 +215,55 @@ public class StringUtil {
 		str = str.replaceAll("<", "&lt;");
 		str = str.replaceAll(">", "&gt;");
 		return str;
+	}
+	
+	public static boolean lengthValidate(String str,int maxLen,StringBuffer msgs,String title){
+		boolean res = isNotEmpty(str) && str.length()<=maxLen;
+		if(!res){
+			msgs.append(title).append("超过指定长度");
+		}
+		return res;
+	}
+	
+	final static String phoneNumRegx = "(^([0-9]{3,4}[-])?\\d{3,8}(-\\d{1,6})?$)|(^\\([0-9]{3,4}\\)\\d{3,8}(\\(\\d{1,6}\\))?$)|(^\\d{3,8}$)";
+	final static String mobileNumRegx = "^1[3|4|5|6|7|8|9][0-9]{9}$";
+	final static String emailRegx = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+	final static String usernameRegx = "^[a-zA-Z0-9_]{4,16}$";
+	final static String passwordRegx = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$";
+	
+	public static boolean phoneNumberValidate(String str,StringBuffer msgs,String title){
+		boolean res = Pattern.matches(phoneNumRegx, str);
+		if(!res){
+			msgs.append(title).append("格式错误：不是有效的电话号码").append("<br/>");
+		}
+		return res;
+	}
+	public static boolean mobileNumberValidate(String str,StringBuffer msgs,String title){
+		boolean res = Pattern.matches(mobileNumRegx, str);
+		if(!res){
+			msgs.append(title).append("格式错误：不是有效的手机号码").append("<br/>");
+		}
+		return res;
+	}
+	public static boolean emailValidate(String str,StringBuffer msgs,String title){
+		boolean res = Pattern.matches(emailRegx, str);
+		if(!res){
+			msgs.append(title).append("格式错误：不是有效的邮箱地址").append("<br/>");
+		}
+		return res;
+	}
+	public static boolean usernameValidate(String str,StringBuffer msgs,String title){
+		boolean res = Pattern.matches(usernameRegx, str);
+		if(!res){
+			msgs.append(title).append("格式错误：不是有效的用户名").append("<br/>");
+		}
+		return res;
+	}
+	public static boolean passwordValidate(String str,StringBuffer msgs,String title){
+		boolean res = Pattern.matches(passwordRegx, str);
+		if(!res){
+			msgs.append(title).append("格式错误：不是有效的密码").append("<br/>");
+		}
+		return res;
 	}
 }

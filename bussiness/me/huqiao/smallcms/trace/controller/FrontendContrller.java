@@ -1,17 +1,28 @@
 package me.huqiao.smallcms.trace.controller;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import me.huqiao.smallcms.common.entity.CommonFile;
+import me.huqiao.smallcms.common.entity.enumtype.UseStatus;
+import me.huqiao.smallcms.common.entity.propertyeditor.CommonFileEditor;
+import me.huqiao.smallcms.common.service.ICommonFileService;
 import me.huqiao.smallcms.servlet.VerifyImageServlet;
 import me.huqiao.smallcms.sms.service.ISMSService;
 import me.huqiao.smallcms.sms.service.impl.SMSServiceImpl;
 import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.sys.service.IFunctionPointService;
 import me.huqiao.smallcms.sys.service.IUserService;
+import me.huqiao.smallcms.trace.entity.RegisterApply;
+import me.huqiao.smallcms.trace.entity.enumtype.RegisterApplyStatus;
+import me.huqiao.smallcms.trace.entity.propertyeditor.RegisterApplyEditor;
 import me.huqiao.smallcms.trace.service.IOperateLogService;
+import me.huqiao.smallcms.trace.service.IRegisterApplyService;
 import me.huqiao.smallcms.util.CommonUtil;
 import me.huqiao.smallcms.util.Constants;
 import me.huqiao.smallcms.util.Md5Util;
@@ -21,6 +32,9 @@ import me.huqiao.smallcms.util.web.LoginInfo;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +54,12 @@ public class FrontendContrller{
 	private IUserService userService;
     @Resource
     private IFunctionPointService functionPointService;
-	
+    @Resource
+    private IRegisterApplyService applyService;
+    @Resource
+    private ICommonFileService fileService;
+
+    
 	@Value("${sm.limit.per.ip}")
 	private Integer ipLimitOfDay;
 	
@@ -48,6 +67,12 @@ public class FrontendContrller{
 	public String loginUI(){
 		
 		return "userLoginUI";
+	}
+	
+    @InitBinder
+	public void initPropEditor(WebDataBinder binder){
+         binder.registerCustomEditor(RegisterApply.class,new RegisterApplyEditor(applyService));
+         binder.registerCustomEditor(CommonFile.class,new CommonFileEditor(fileService));
 	}
 	
 	@RequestMapping("/index")
@@ -66,15 +91,97 @@ public class FrontendContrller{
 	}
 	
 	@RequestMapping(value = "/register",method = RequestMethod.POST)
-	public String register(){
-		
-		return "registerSuccess";
+	@ResponseBody
+	public JsonResult register(@ModelAttribute RegisterApply registerApply,
+			HttpServletRequest request,
+			@RequestParam("vcode")String vcode,
+			@RequestParam("ckCode")String ckCode,
+			@RequestParam("license")String license,
+			@RequestParam("lawPersonID")String lawPersonID,
+			@RequestParam(value = "otherQualifi",required = false)String[] otherQualifi
+			){
+		String ip = request.getRemoteHost();
+		try{
+			//数据完整性
+			JsonResult formValidate = registerApply.baseDataValidate();
+			if(!formValidate.isOK()){
+				operateLogService.addLog("WARN",ip,"Register:" + registerApply.getUsername(),GetCodeMsgs.FORM_DATA_INVALID);
+				return JsonResult.error(formValidate.getMessage());
+			}
+			//验证码
+			if(!pageVerifyCodeValidate(vcode,request)){
+				operateLogService.addLog("WARN",ip,"Register:" + registerApply.getUsername(),GetCodeMsgs.INVALID_VCODE);
+				return JsonResult.error(GetCodeMsgs.INVALID_VCODE);
+			}
+			//动态码
+			String smsCode = (String)request.getSession().getAttribute("SMS_CODE");
+			if(StringUtil.isEmpty(smsCode) || operateLogService.timeValidate(registerApply.getMobileNumber(),SECONDS_OF_FIVE_MINUTE)){
+				operateLogService.addLog("WARN",ip,"Register:"+registerApply.getUsername(),GetCodeMsgs.TIME_TOO_LONG);
+				return JsonResult.error(GetCodeMsgs.TIME_TOO_LONG);
+			}
+			
+			//用户名
+			User user = userService.getById(User.class, registerApply.getUsername());
+			if(user!=null){
+				operateLogService.addLog("WARN",ip,"Register:"+registerApply.getUsername(),GetCodeMsgs.USER_EXISTED);
+				return JsonResult.error(GetCodeMsgs.USER_EXISTED);
+			}
+			
+			//营业执照
+			CommonFile licenseFile = fileService.getEntityByProperty(CommonFile.class, "manageKey",license);
+			if(licenseFile==null){
+				operateLogService.addLog("WARN",ip,"Register:" + registerApply.getUsername(),GetCodeMsgs.FORM_DATA_INVALID+":No license file");
+				return JsonResult.error("请上传营业执照");
+			}else{
+				licenseFile.setInuse(UseStatus.InUse);
+				fileService.update(licenseFile);
+				registerApply.setLicense(licenseFile);
+			}
+			
+			//法人身份证
+			CommonFile lawpersonIDFile = fileService.getEntityByProperty(CommonFile.class, "manageKey",lawPersonID);
+			if(lawpersonIDFile==null){
+				operateLogService.addLog("WARN",ip,"Register:" + registerApply.getUsername(),GetCodeMsgs.FORM_DATA_INVALID+":No lawpersonID file");
+				return JsonResult.error("请上传营业执照");
+			}else{
+				lawpersonIDFile.setInuse(UseStatus.InUse);
+				fileService.update(lawpersonIDFile);
+				registerApply.setLawPersonIDCard(lawpersonIDFile);
+			}
+			
+			//其他资质
+			if(otherQualifi!=null){
+				Set<CommonFile> files = new HashSet<CommonFile>();
+				for(String other : otherQualifi){
+					CommonFile otherFile = fileService.getEntityByProperty(CommonFile.class, "manageKey",other);
+					if(otherFile!=null){
+						files.add(otherFile);
+					}
+				}
+				registerApply.setOtherQualifications(files);
+			}
+			
+			registerApply.setStatus(RegisterApplyStatus.UnDeal);
+			registerApply.setManageKey(Md5Util.getManageKey());
+			applyService.add(registerApply);
+			clearRandomCode(request.getSession());
+			return JsonResult.success(registerApply.getManageKey());
+			
+		}catch(Exception e){
+			operateLogService.addLog("WARN",ip,"Register:"+registerApply.getUsername(),GetCodeMsgs.SERVER_ERROR + ":" + e.getMessage());
+			e.printStackTrace();
+			return JsonResult.error("Server-error");
+		}
 	}
 	
+	@RequestMapping(value = "/regDetail",method = RequestMethod.GET)
+	public void registerSuccess(@RequestParam("key")String code,HttpServletRequest request){
+		RegisterApply apply = applyService.getEntityByProperty(RegisterApply.class, "manageKey", code);
+		request.setAttribute("apply", apply);
+	}
 	
 	@RequestMapping(value = "/iforget",method = RequestMethod.GET)
 	public void iforgetUI(){
-		
 	}
 	
 	@RequestMapping(value = "/iforget",method = RequestMethod.POST)
@@ -112,7 +219,8 @@ public class FrontendContrller{
 			}
 			
 			//动态码
-			if(operateLogService.timeValidate(user.getPhone(),SECONDS_OF_FIVE_MINUTE)){
+			String smsCode = (String)request.getSession().getAttribute("SMS_CODE");
+			if(StringUtil.isEmpty(smsCode) || operateLogService.timeValidate(user.getPhone(),SECONDS_OF_FIVE_MINUTE)){
 				operateLogService.addLog("WARN",ip,"Login:"+username,GetCodeMsgs.TIME_TOO_LONG);
 				return JsonResult.error(GetCodeMsgs.TIME_TOO_LONG);
 			}
@@ -145,6 +253,8 @@ public class FrontendContrller{
      */
     private void clearRandomCode(HttpSession session){
     	session.setAttribute(Constants.RANOM_CODE_FOR_LOGIN,null);
+    	session.setAttribute(VerifyImageServlet.SIMPLE_CAPCHA_SESSION_KEY,null);
+    	session.setAttribute("SMS_CODE",null);
     }
 	
 	
@@ -176,10 +286,10 @@ public class FrontendContrller{
 				}
 				number = user.getPhone();
 			}
-			/*if(!operateLogService.timeValidate(number,SECONDS_OF_ONE_MINUTE)){
+			if(!operateLogService.timeValidate(number,SECONDS_OF_ONE_MINUTE)){
 				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.TIME_TOO_SHORT);
 				return JsonResult.error(GetCodeMsgs.TIME_TOO_SHORT);
-			}*/
+			}
 			if(!operateLogService.ipValidate(number,ipLimitOfDay)){
 				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.IP_TOO_FREQUENT);
 				return JsonResult.error(GetCodeMsgs.IP_TOO_FREQUENT);
@@ -197,6 +307,7 @@ public class FrontendContrller{
 			}
 			if(sendResult.isOK()){
 				operateLogService.addLog("INFO",ip,"getCode:"+number,sendResult.getMessage());
+				request.getSession().setAttribute("SMS_CODE", sendResult.getMessage());
 				return JsonResult.success(CommonUtil.replaceMobileNumberToStarts(number));
 			}else if(sendResult.getMessage().equals("isv.MOBILE_NUMBER_ILLEGAL")){
 				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.WRONG_NUMBER);
@@ -208,6 +319,21 @@ public class FrontendContrller{
 		}catch(Exception e){
 			e.printStackTrace();
 			return JsonResult.error("Exception");
+		}
+	}
+	
+	@RequestMapping(value = "/usernameValidate",produces={"application/json"})
+	@ResponseBody
+	private JsonResult usernameValidate(@RequestParam("username")String username){
+		try{
+			User user = userService.getById(User.class, username);
+			if(user!=null){
+				return JsonResult.success("NO");
+			}else{
+				return JsonResult.success("OK");
+			}
+		}catch(Exception e){
+			return JsonResult.error(e.getMessage());
 		}
 	}
 	

@@ -218,14 +218,14 @@ img.vcode{
 	color: #666;
     font-weight: normal;
 }
-.image-wrapper .atta-div{
+.image-wrapper .atta-div,.view .atta-div{
 	width:102px;
 	height:102px;
 	border:1px solid #ddd;
 	display: inline-block;
     margin: 0px 5px;
 }
-.image-wrapper .atta-div>img{
+.image-wrapper .atta-div>img,.view .atta-div>img{
 	max-width:102px;
 	height:102px;
 	cursor:pointer;
@@ -235,6 +235,10 @@ img.vcode{
 	min-height:115px;
 	padding-left:110px;
 }
+.form-input.view{
+	height:auto;
+	min-height:115px;
+}
 
 .hide{
 	display: none;
@@ -243,4 +247,20 @@ div.atta-delete-div{
 	text-align:center;
 	color:red;
 	cursor:pointer;
+}
+.form-input input.invalid{
+	border:1px solid #A90329;
+	background: #fff0f0;	
+}
+.view-page .form-input{
+	margin-top:0px;
+	padding:0px 5px;
+}
+.view-page .form-input>span:nth-child(2),.view-page .form-input>p{
+	height:26px;
+	line-height:31px;
+	font-size:14px;
+}
+.view-page .form-input:hover{
+	background: #efefef;
 }

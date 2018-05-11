@@ -11,6 +11,8 @@ public class GetCodeMsgs {
 	public final static String ILLEGAL_ACCESS = "Illegal-access";
 	public final static String WRONG_NUMBER = "Wrong-number";
 	public final static String SERVER_ERROR = "Server-error";
+	public final static String FORM_DATA_INVALID = "Form-data-invalid";
 	public final static String OK = "OK";
+	public final static String USER_EXISTED = "User-existed";
 	
 }

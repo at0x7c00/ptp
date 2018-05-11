@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -24,10 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import me.huqiao.smallcms.common.entity.CommonFile;
 import me.huqiao.smallcms.trace.entity.enumtype.RegisterApplyStatus;
 import me.huqiao.smallcms.util.Md5Util;
+import me.huqiao.smallcms.util.StringUtil;
+import me.huqiao.smallcms.util.web.JsonResult;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -81,6 +80,11 @@ private RegisterApplyStatus status;
 private String dealRemak;
 	/**MD5管理ID*/
 	protected String manageKey;
+	
+	private String username;
+	private String password;
+	private String mobileNumber;
+	
 	/**@return String MD5管理ID */
 	public String getManageKey() {
 		return manageKey;
@@ -337,4 +341,46 @@ public String getDealRemak(){
 	public String toString() {
 		return "RegisterApply [manageKey=" + manageKey + "]";
 	}
+	@Column(name = "username",nullable = true)
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	@Column(name = "password",nullable = true)
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	@Column(name = "mobile_number",nullable = true)
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	
+	public JsonResult baseDataValidate() {
+		StringBuffer msg = new StringBuffer();
+		boolean success = true;
+		
+		success = success & StringUtil.lengthValidate(name, 50,msg,"公司名称");
+		success = success & StringUtil.lengthValidate(lawPerson, 20,msg,"公司法人");
+		success = success & StringUtil.lengthValidate(address, 50,msg,"公司地址");
+		success = success & StringUtil.lengthValidate(contact, 50,msg,"联系人");
+		success = success & StringUtil.lengthValidate(telq, 20,msg,"联系电话");
+		success = success & StringUtil.lengthValidate(name, 50,msg,"公司名称");
+		
+		success = success & StringUtil.emailValidate(email,msg,"E-mail");
+		success = success & StringUtil.usernameValidate(username,msg,"用户名");
+		success = success & StringUtil.passwordValidate(password,msg,"密码");
+		success = success & StringUtil.mobileNumberValidate(mobileNumber,msg,"手机号");
+		
+		return success ? JsonResult.success(msg.toString()) : JsonResult.error(msg.toString());
+		
+	}
+	
 }

@@ -47,7 +47,6 @@ public class RegisterApplyController  extends BaseController {
     @InitBinder
 	public void initPropEditor(WebDataBinder binder){
          binder.registerCustomEditor(CommonFile.class,new CommonFileEditor(commonFileService));
-         binder.registerCustomEditor(CommonFile.class,new CommonFileEditor(commonFileService));
 	}
     //复杂关联关系的Service
 @Resource private ICommonFileService commonFileService;
