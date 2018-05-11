@@ -35,7 +35,7 @@
 				
 				<div class="form-input">
 					<label class="label lock"></label>
-					<input type="text" name="password" placeholder="密码" class="blod"/>
+					<input type="password" name="password" placeholder="密码" class="blod"/>
 				</div>
 				
 				<div class="form-input">
@@ -92,9 +92,10 @@
     		var password = $("input[name=password]").val();
     		var vcode = $("input[name=vcode]").val();
     		var ckCode = $("input[name=ckCode]").val();
+    		var url = basePath + "ulogin.do?username=" + username + "&password=" + encodeURIComponent(password) + "&vcode=" + vcode + "&ckCode=" + ckCode;
     		$.ajax({
     			method:"get",
-    			url:basePath + "ulogin.do?username=" + username + "&password=" + password + "&vcode=" + vcode + "&ckCode=" + ckCode,
+    			url:url,
     			success:function(d){
     				if(d.statusCode!='200'){
     					toastr["warning"](getCodeMsgs[d.message]);

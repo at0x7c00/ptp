@@ -72,5 +72,6 @@ public interface IOperateLogDao extends IBaseDao<OperateLog> {
      */
 	List<OperateLog> findById(Integer[] ids);
 	boolean existedBefore(String number, Date datePlus);
+	boolean existedBefore(String number, Date datePlus,String code);
 	Long countForIP(String ip, Date datePlus);
 }

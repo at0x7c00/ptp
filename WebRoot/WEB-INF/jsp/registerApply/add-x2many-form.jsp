@@ -50,31 +50,29 @@
 					</div>
 				</div>
 			<!--其他资质  otherQualifications:one to many prop tab start -->
-				<div class="tab-pane fade tab-form" id="otherQualifications" 
-				data-formurl="${basePath}commonFile/tabAddForm.do"
-				data-initdata=""
-				data-trtarget="otherQualifications"
-				>
-					<div class="tab-form-menu">
-						<a href="javascript:void(0);" class="btn btn-primary add-btn"><i class="fa fa-plus"></i> <spring:message code="base.function.add"></spring:message></a>
-			    	<a href="javascript:void(0);"  class="btn btn-danger delete-btn"><i class="fa fa-trash-o"></i> <spring:message code="base.function.delete"></spring:message></a>
+				<div class="tab-pane fade" id="otherQualifications">
+					<div style="padding:5px">
+						<a class="btn btn-primary attachement-dialog-add-btn"
+						   href="javascript:void(0)" style="padding:5px 15px;" 
+						   data-selectlist="otherQualificationsselectList" 
+						   data-targetpanel="${targetPanel}"
+						   data-maxfilesize="100"
+						   data-acceptedfiles="${file_format_picture}"
+						   >
+							<i class="fa fa-plus"></i> <spring:message code="base.function.add"/>
+						</a>
+						<a class="btn btn-danger select-list-delete-btn"
+						   href="javascript:void(0)" style="padding:5px 15px;" data-selectlist="otherQualificationsselectList">
+							<i class="fa fa-trash-o"></i> <spring:message code="base.function.delete"/>
+						</a>
 					</div>
-					<input type="hidden" name="otherQualificationsTrCount" value="0"/>
-					<div class="dataTables_wrapper" style="border-bottom:1px solid #ddd;"> 
-						<table id="dt_basic" class="table table-striped table-bordered table-hover tab-form-table">
-							<thead>
-								<tr>
-									<th align="center" width="16px">
-											<label class="checkbox">
-												<input type="checkbox" name="checkbox" class="smart-form-checkall" data-groupname="otherQualificationsChk">
-											<i></i></label>
-									</th>
-									<%@include file="/WEB-INF/jsp/filee/tab-add-list-head.jsp" %>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+				<div class="dataTables_wrapper select-list" id="otherQualificationsselectList" style="border-bottom:1px solid #ddd;" 
+						 data-dataurl="filee/selectList.do"
+					 	 data-groupname="otherQualificationsKeys"
+						 data-entityidname="manageKey"
+						 data-method="POST"
+					 	 data-initvalues="${tempBean.otherQualificationsKeys}"
+						 >
 					</div>
 				</div>
 			<!--其他资质  otherQualifications:!-- one to many prop tab end -->

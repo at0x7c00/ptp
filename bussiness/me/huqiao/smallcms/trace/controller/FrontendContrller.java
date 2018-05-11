@@ -115,7 +115,7 @@ public class FrontendContrller{
 			}
 			//动态码
 			String smsCode = (String)request.getSession().getAttribute("SMS_CODE");
-			if(StringUtil.isEmpty(smsCode) || operateLogService.timeValidate(registerApply.getMobileNumber(),SECONDS_OF_FIVE_MINUTE)){
+			if(StringUtil.isEmpty(smsCode) || !smsCode.equals(ckCode) || !operateLogService.hasCodeCreated(registerApply.getMobileNumber(),SECONDS_OF_FIVE_MINUTE,ckCode)){
 				operateLogService.addLog("WARN",ip,"Register:"+registerApply.getUsername(),GetCodeMsgs.TIME_TOO_LONG);
 				return JsonResult.error(GetCodeMsgs.TIME_TOO_LONG);
 			}
@@ -184,10 +184,40 @@ public class FrontendContrller{
 	public void iforgetUI(){
 	}
 	
-	@RequestMapping(value = "/iforget",method = RequestMethod.POST)
-	public String iforget(){
+	@RequestMapping(value = "/resetPwd",method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult resetPwd(@RequestParam("token")String token,@RequestParam("pwd")String pwd,HttpServletRequest request){
 		
-		return "registerSuccess";
+		String ip = request.getRemoteHost();
+		try{
+			String username = (String)request.getSession().getAttribute(token);
+			if(StringUtil.isEmpty(username)){
+				operateLogService.addLog("WARN",ip,"ResetPwd:"+token,GetCodeMsgs.ILLEGAL_ACCESS);
+				return JsonResult.error(GetCodeMsgs.ILLEGAL_ACCESS);
+			}
+			
+			User user = userService.getById(User.class, username);
+			if(user==null){
+				operateLogService.addLog("WARN",ip,"ResetPwd:" + username,GetCodeMsgs.USER_NOT_FOUND);
+				return JsonResult.error(GetCodeMsgs.USER_NOT_FOUND);
+			}
+			if(!StringUtil.passwordValidate(pwd,new StringBuffer(),"title")){
+				operateLogService.addLog("WARN",ip,"ResetPwd:" + username,GetCodeMsgs.FORM_DATA_INVALID);
+				return JsonResult.error(GetCodeMsgs.FORM_DATA_INVALID);
+			}
+			user.setPassword(Md5Util.getMD5Code(pwd));
+			userService.update(user);
+			request.getSession().removeAttribute(token);
+			
+			prepareFunctionPoint(request.getSession(),user);
+			request.getSession().setAttribute("____logintype", "customer");
+			return JsonResult.success("OK");
+			
+		}catch(Exception e){
+			operateLogService.addLog("WARN",ip,"ResetPwd:"+token,GetCodeMsgs.SERVER_ERROR + ":" + e.getMessage());
+			e.printStackTrace();
+			return JsonResult.error("Server-error");
+		}
 	}
 	
 	@RequestMapping(value = "/query/{uuid}")
@@ -220,7 +250,7 @@ public class FrontendContrller{
 			
 			//动态码
 			String smsCode = (String)request.getSession().getAttribute("SMS_CODE");
-			if(StringUtil.isEmpty(smsCode) || operateLogService.timeValidate(user.getPhone(),SECONDS_OF_FIVE_MINUTE)){
+			if(StringUtil.isEmpty(smsCode) || !smsCode.equals(ckCode) || !operateLogService.hasCodeCreated(user.getPhone(),SECONDS_OF_FIVE_MINUTE,smsCode)){
 				operateLogService.addLog("WARN",ip,"Login:"+username,GetCodeMsgs.TIME_TOO_LONG);
 				return JsonResult.error(GetCodeMsgs.TIME_TOO_LONG);
 			}
@@ -228,7 +258,7 @@ public class FrontendContrller{
 			//密码
 			if(!Md5Util.getMD5Code(password).equals(user.getPassword())){
 				operateLogService.addLog("WARN",ip,"Login:"+user.getUsername(),GetCodeMsgs.INVALID_PWD);
-				return JsonResult.error(GetCodeMsgs.TIME_TOO_LONG);
+				return JsonResult.error(GetCodeMsgs.INVALID_PWD);
 			}
 			prepareFunctionPoint(request.getSession(),user);
 			request.getSession().setAttribute("____logintype", "customer");
@@ -238,6 +268,10 @@ public class FrontendContrller{
 			e.printStackTrace();
 			return JsonResult.error("Server-error");
 		}
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(Md5Util.getMD5Code("@WSX1qaz"));
 	}
 	
     private void prepareFunctionPoint(HttpSession session,User user){
@@ -286,7 +320,7 @@ public class FrontendContrller{
 				}
 				number = user.getPhone();
 			}
-			if(!operateLogService.timeValidate(number,SECONDS_OF_ONE_MINUTE)){
+			if(operateLogService.hasCodeCreated(number,SECONDS_OF_ONE_MINUTE)){
 				operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.TIME_TOO_SHORT);
 				return JsonResult.error(GetCodeMsgs.TIME_TOO_SHORT);
 			}
@@ -334,6 +368,46 @@ public class FrontendContrller{
 			}
 		}catch(Exception e){
 			return JsonResult.error(e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/token",produces={"application/json"})
+	@ResponseBody
+	public JsonResult getToken(HttpServletRequest request,
+			@RequestParam(value = "username",required = false)String username,
+			@RequestParam(value = "ckCode",required = false)String ckCode,
+			@RequestParam(value = "vcode",required = false)String vcode){
+		try{
+			//获取Code的验证
+			String ip = request.getRemoteHost();
+			if(!pageVerifyCodeValidate(vcode,request)){
+				operateLogService.addLog("WARN",ip,"getToken:" + username,GetCodeMsgs.INVALID_VCODE);
+				return JsonResult.error(GetCodeMsgs.INVALID_VCODE);
+			}
+			//为登录和密码找回查询用户信息
+			User user = null;
+			user = userService.findByUsernameOfPhonenumber(username,username);
+			if(user==null){
+				operateLogService.addLog("WARN",ip,"getToken:"+username,GetCodeMsgs.USER_NOT_FOUND);
+				return JsonResult.error(GetCodeMsgs.USER_NOT_FOUND);
+			}
+			String number = user.getPhone();
+			
+			String smsCode = (String)request.getSession().getAttribute("SMS_CODE");
+			if(StringUtil.isEmpty(smsCode) || !smsCode.equals(ckCode) || !operateLogService.hasCodeCreated(number,SECONDS_OF_FIVE_MINUTE,smsCode)){
+				operateLogService.addLog("WARN",ip,"Register:"+number,GetCodeMsgs.TIME_TOO_LONG);
+				return JsonResult.error(GetCodeMsgs.TIME_TOO_LONG);
+			}
+			if(!operateLogService.ipValidate(number,ipLimitOfDay)){
+				operateLogService.addLog("WARN",ip,"getToken:"+number,GetCodeMsgs.IP_TOO_FREQUENT);
+				return JsonResult.error(GetCodeMsgs.IP_TOO_FREQUENT);
+			}
+			String token = Md5Util.getManageKey();
+			request.getSession().setAttribute(token, user.getUsername());
+			return JsonResult.success(token);
+		}catch(Exception e){
+			e.printStackTrace();
+			return JsonResult.error("Exception");
 		}
 	}
 	

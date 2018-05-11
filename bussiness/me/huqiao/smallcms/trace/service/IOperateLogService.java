@@ -48,7 +48,8 @@ public interface IOperateLogService extends IBaseService<OperateLog> {
 	
 	public void addLog(String type, String ip, String operate, String description);
 	
-	public boolean timeValidate(String number,Long secondsAgo);
+	public boolean hasCodeCreated(String number,Long secondsAgo);
+	public boolean hasCodeCreated(String number,Long secondsAgo,String code);
 	
 	public boolean ipValidate(String number, Integer ipLimitOfDay);
 }

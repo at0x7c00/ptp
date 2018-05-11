@@ -30,7 +30,7 @@ $(function(){
 		if(usernameId){
 			username = $(usernameId).val();
 		}
-		if(usernameId && username && username.isEmpty()){
+		if(usernameId && (!username || username.isEmpty())){
 			toastr['info']("请输入手机号/用户名!");
 			return;
 		}
@@ -236,6 +236,7 @@ getCodeMsgs["FileSize-too-big" ]="您上传的文件超过规定的大小了";
 getCodeMsgs["Format-error"     ]="文件格式错误";
 getCodeMsgs["Form-data-invalid"]="提交的数据不完整";
 getCodeMsgs["User-existed"     ]="您注册的用户名已存在";
+getCodeMsgs["Illegal-pwd"      ]="账号或密码错误";
 
 function ajaxError(xhr, ajaxOptions, thrownError){
 	toastr["error"]("Http status: " + xhr.status + " " + xhr.statusText + "\najaxOptions: " + ajaxOptions + "\nthrownError:"+thrownError + "\n" +xhr.responseText);
@@ -339,7 +340,7 @@ function imageView(key){
 			return true;
 		},
 		isPhone:function() {
-			return (new RegExp(/(^([0-9]{3,4}[-])?\d{3,8}(-\d{1,6})?$)|(^\([0-9]{3,4}\)\d{3,8}(\(\d{1,6}\))?$)|(^\d{3,8}$)/).test(this));
+			return (new RegExp(/(^([0-9]{3,4}[-])?\d{3,8}(-?\d{1,6})?$)|(^\([0-9]{3,4}\)\d{3,8}(\(\d{1,6}\))?$)|(^\d{3,8}$)/).test(this));
 		},
 		isMobileNum:function(){
 			return (new RegExp(/^1[3|4|5|6|7|8|9][0-9]{9}$/).test(this));

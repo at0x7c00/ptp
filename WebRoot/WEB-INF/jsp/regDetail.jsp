@@ -111,7 +111,7 @@
 			<div class="form-input">
 				<span class="form-input-title">处理备注：</span>
 				<p>
-				<b>${apply.dealRemak}fdsafdsafdsa</b>
+				<b>${apply.dealRemak}</b>
 				</p>
 			</div>
 			

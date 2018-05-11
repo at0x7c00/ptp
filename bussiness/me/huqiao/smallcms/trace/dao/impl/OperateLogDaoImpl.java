@@ -183,6 +183,17 @@ public class OperateLogDaoImpl extends BaseDaoImpl<OperateLog> implements IOpera
 	}
 	
 	@Override
+	public boolean existedBefore(String number, Date date,String code) {
+		Criteria criteria = getSession().createCriteria(OperateLog.class).setProjection(Projections.rowCount());
+		criteria.add(Restrictions.ge("operateTime", date));
+		criteria.add(Restrictions.eq("operate", "getCode:" + number));
+		criteria.add(Restrictions.eq("type","INFO"));
+		criteria.add(Restrictions.eq("description",code));
+		long count = (Long) criteria.uniqueResult();
+		return count>0;
+	}
+	
+	@Override
 	public Long countForIP(String ip, Date date) {
 		Criteria criteria = getSession().createCriteria(OperateLog.class).setProjection(Projections.rowCount());
 		criteria.add(Restrictions.ge("operateTime", date));
