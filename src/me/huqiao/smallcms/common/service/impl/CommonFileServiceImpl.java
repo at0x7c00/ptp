@@ -1,7 +1,9 @@
 package me.huqiao.smallcms.common.service.impl;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +20,9 @@ import me.huqiao.smallcms.common.entity.CommonFile;
 import me.huqiao.smallcms.common.entity.CommonFolder;
 import me.huqiao.smallcms.common.entity.enumtype.UseStatus;
 import me.huqiao.smallcms.common.service.ICommonFileService;
+import me.huqiao.smallcms.common.service.ICommonFolderService;
 import me.huqiao.smallcms.util.DateUtil;
+import me.huqiao.smallcms.util.Md5Util;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.apache.log4j.Logger;
@@ -28,6 +33,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import test.QrCode;
 
 /**
  *  文件Service实现
@@ -42,6 +49,8 @@ public class CommonFileServiceImpl extends BaseServiceImpl<CommonFile> implement
     /**文件dao*/
     @Resource
     private ICommonFileDao fileeDao;
+    @Resource
+    private ICommonFolderService folderService;
     
     @Override
     public Page<CommonFile> getPage(CommonFile filee,Page pageInfo) {
@@ -238,6 +247,33 @@ public class CommonFileServiceImpl extends BaseServiceImpl<CommonFile> implement
 			}
 		}
 		return res;
+	}
+	
+	@Override
+	public CommonFile mkQrCode(InputStream in, String url,String uuid)throws Exception {
+		BufferedImage baseImage = ImageIO.read(in);
+		BufferedImage image = QrCode.createQRCodeBitmap(url, baseImage);
+		
+		CommonFolder folder = folderService.getById(CommonFolder.class, 1);
+		CommonFile dbFile = new CommonFile();
+		dbFile.setFolder(folder);
+		dbFile.setCreateDate(new Date());
+		dbFile.setExtensionName("png");
+		dbFile.setInuse(UseStatus.InUse);
+		dbFile.setManageKey(Md5Util.getManageKey());
+		dbFile.setName(uuid+".png");
+		File outputFile = new File(dbFile.getFullName());
+		File dir = outputFile.getParentFile();
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		if(!outputFile.exists()){
+			outputFile.createNewFile();
+		}
+		ImageIO.write(image, "png", outputFile);
+		
+		add(dbFile);
+		return dbFile;
 	}
 	
 	

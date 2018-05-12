@@ -19,10 +19,12 @@ import me.huqiao.smallcms.sms.service.impl.SMSServiceImpl;
 import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.sys.service.IFunctionPointService;
 import me.huqiao.smallcms.sys.service.IUserService;
+import me.huqiao.smallcms.trace.entity.Product;
 import me.huqiao.smallcms.trace.entity.RegisterApply;
 import me.huqiao.smallcms.trace.entity.enumtype.RegisterApplyStatus;
 import me.huqiao.smallcms.trace.entity.propertyeditor.RegisterApplyEditor;
 import me.huqiao.smallcms.trace.service.IOperateLogService;
+import me.huqiao.smallcms.trace.service.IProductService;
 import me.huqiao.smallcms.trace.service.IRegisterApplyService;
 import me.huqiao.smallcms.util.CommonUtil;
 import me.huqiao.smallcms.util.Constants;
@@ -59,6 +61,8 @@ public class FrontendContrller{
     private IRegisterApplyService applyService;
     @Resource
     private ICommonFileService fileService;
+    @Resource
+    private IProductService productService;
 
     
 	@Value("${sm.limit.per.ip}")
@@ -223,8 +227,12 @@ public class FrontendContrller{
 	}
 	
 	@RequestMapping(value = "/query/{uuid}")
-	public String query(@PathVariable(value = "uuid")String uuid){
-		
+	public String query(@PathVariable(value = "uuid")String uuid,HttpServletRequest request){
+		Product product = productService.getEntityByProperty(Product.class, "uuid", uuid);
+		if(product==null || !product.getCanDown()){
+			return "product404";
+		}
+		request.setAttribute("product", product);
 		return "query";
 	}
 	

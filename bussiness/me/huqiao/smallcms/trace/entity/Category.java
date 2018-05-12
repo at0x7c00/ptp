@@ -275,11 +275,12 @@ public String getName(){
 	@Transient
 	public String getFullName(){
 		String name = this.name;
-		Category parent = this.parent;
+		Category parent = this.getParent();
 		int count = 30;
-		while(parent!=null){
-			name = parent.name + "-" + name;
-			parent = parent.parent;
+		while(parent!=null && count>0){
+			name = parent.getName() + "-" + name;
+			parent = parent.getParent();
+			count--;
 		}
 		return name;
 	}

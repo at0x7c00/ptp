@@ -1,5 +1,6 @@
 package me.huqiao.smallcms.common.service;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -43,5 +44,7 @@ public interface ICommonFileService extends IBaseService<CommonFile> {
 	public List<CommonFile> findAttachementFromContent(String content);
 	
 	public List<CommonFile> findDeleteAtts(List<CommonFile> oldAtts, List<CommonFile> newAtts);
+
+	public CommonFile mkQrCode(InputStream in, String url,String uuid)throws Exception;
     
 }

@@ -1,4 +1,6 @@
 package me.huqiao.smallcms.trace.controller;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +21,6 @@ import me.huqiao.smallcms.sys.entity.propertyeditor.UserEditor;
 import me.huqiao.smallcms.sys.service.IUserService;
 import me.huqiao.smallcms.trace.entity.Category;
 import me.huqiao.smallcms.trace.entity.Product;
-import me.huqiao.smallcms.trace.entity.RegisterApply;
 import me.huqiao.smallcms.trace.entity.enumtype.ProductStatus;
 import me.huqiao.smallcms.trace.entity.propertyeditor.CategoryEditor;
 import me.huqiao.smallcms.trace.service.ICategoryService;
@@ -30,6 +31,7 @@ import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,6 +53,11 @@ public class ProductController  extends BaseController {
    /**商品服务*/
     @Resource
     private IProductService productService;
+    @Resource
+    private ICommonFileService fileService;
+    @Value("${system.rooturl}")
+    private String systemRootUrl;
+
  /**
   * 注册属性编辑器
   * @param binder 数据绑定器
@@ -399,11 +406,31 @@ public class ProductController  extends BaseController {
     @RequestMapping(value="/approve",method=RequestMethod.POST)
     @ResponseBody
     public JsonResult approve(HttpServletRequest request,
-	@ModelAttribute(value="product") Product product,@RequestParam(value = "remark",required = false)String remark,
+	@ModelAttribute(value="product") Product product,
+	@RequestParam(value = "pass",required = false)String pass,
+	@RequestParam(value = "remark",required = false)String remark,
 	BindingResult result) {
     	try{
     		if(product.getCanApprove()){
-    			product.addLog(getCurrentUser().getDesc(),"审核:"+(StringUtil.isEmpty(remark) ? "" : remark));
+    			boolean ok = pass.equals("Yes");
+    			product.addLog(getCurrentUser().getDesc(),"审核"+(ok?"通过":"拒绝")+":"+(StringUtil.isEmpty(remark) ? "" : remark));
+    			product.setStatus(ok ? ProductStatus.Success : ProductStatus.Failed);
+    			if(ok && product.getQrCode()==null){
+    				try {
+    					InputStream in = this.getClass().getClassLoader().getResourceAsStream("qr-base.png");
+    					String url = systemRootUrl; 
+    					if(!url.endsWith("/")){
+    						url += "/";
+    					}
+    					url += "query/" + product.getUuid() + ".do";
+    					CommonFile file = fileService.mkQrCode(in,url,product.getUuid());
+    					product.setQrCode(file);
+    					in.close();
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+    				
+    			}
     			productService.update(product);
     			return JsonResult.success("审核成功!");
     		}else{

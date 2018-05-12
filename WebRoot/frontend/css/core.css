@@ -264,3 +264,149 @@ div.atta-delete-div{
 .view-page .form-input:hover{
 	background: #efefef;
 }
+
+.page-title{
+	border-left:3px solid #1266b6;
+	letter-spacing: 2px;
+	color:#1266b6;
+	padding-left:10px;
+	margin:0px;
+}
+
+.item{
+	min-height:25px;
+	background: #f2f2f2;
+	margin:10px 0px;
+}
+.item .item-title,.item .item-content{
+	display:inline-block;
+}
+.item .item-title{
+	height:25px;
+	line-height:25px;
+	font-size:16px;
+	padding-left:5px;
+	width:150px;
+	background: #ddd;
+	float:left;
+	letter-spacing: 2px;
+}
+.item .item-content{
+	min-height:25px;
+	line-height:25px;
+	margin-left:10px;
+	font-size:14px;
+	width:1010px;
+}
+.img-wrapper{
+	display: inline-block;
+	width:385px;
+	height:260px;
+	/* border:1px solid red; */
+}
+.images{
+	display: inline-block;
+	width:220px;
+	height:250px;
+	/* border:1px solid black; */
+	float:right;
+	background: #333;
+	padding:1px;
+	text-align: center;
+	cursor:pointer;
+}
+.images>img:not(:first-child){
+	display: none;
+}
+.images>img{
+	max-height:250px;
+	max-width:220px;
+	
+	height:250px;
+	width:220px;
+}
+.title-logo{
+	height:80px;
+}
+.title-logo>img{
+	margin-top:10px;
+}
+.title-text{
+	text-align: center;
+}
+.title-text>img{
+	margin-top:10px;
+}
+.wrapper.form.query{
+	padding-bottom:30px;margin-top:0px;border:0px;
+}
+
+.wrapper.form.query>div.content{
+	width:1180px;
+	margin:auto;
+	padding-top:10px;
+}
+@media screen and (max-width: 1180px) {
+	div.main{
+		width:100%;
+	}
+    .title-all{
+    	position: fixed;
+    	top:0px;
+    	z-index: 1499;
+    	width:100%;
+    	background: #fff;
+    }
+    .wrapper.form.query{
+    	margin-top:212px;
+    }
+    .title-logo>img{
+    	height:35px;
+    	width:auto;
+    }
+    .sys-header{
+    	height:40px;
+    }
+    .title-logo{
+    	height:40px;
+    }
+    .title-logo>img{
+		margin-top:0px;
+	}
+	
+	.title-text>img{
+		margin-top:5px;
+		height:auto;
+		width:100%;
+	}
+	.title-all{
+		    box-shadow: 0px 0px 19px #a59d9d;
+	}
+	
+	.wrapper.form.query>div.content{
+		width:100%;
+	}
+	.item .item-title{
+		width:20%;
+		min-width:100px;
+	}
+	.item .item-content{
+		width:75%;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.item .item-content{
+		width:100%;
+		border-top:2px solid #ddd;
+		margin-left:0px;
+		padding-left:5px;
+	}
+	.item .item-title{
+		width:150px;
+	}
+	.item{
+		margin:15px 0px;
+	}
+}
+

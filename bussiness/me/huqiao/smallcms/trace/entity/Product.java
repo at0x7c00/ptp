@@ -617,7 +617,7 @@ public String getCreatorQuery(){
 	
 	@Transient
 	public boolean getCanDown(){
-		return status == ProductStatus.Success || status == ProductStatus.Up;
+		return status == ProductStatus.Up;
 	}
 	
 	@Transient

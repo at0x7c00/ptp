@@ -33,7 +33,7 @@
 			
 			<td>
 			<c:choose>
-				<c:when test="${not empty tempBean.qrCode and tempBean.canDown}">
+				<c:when test="${not empty tempBean.qrCode and (tempBean.canDown or tempBean.canUp)}">
 					<a href="${basePath}filee/downloadFile.do?key=${tempBean.qrCode.manageKey}" target="_blank">
 					下载
 					</a>
@@ -86,11 +86,13 @@
 			</c:if>
 			
 			<c:if test="${not my }">
-				<n:pv url="product/myUpdate.do">
+				<c:if test="${tempBean.canApprove}">
+				<n:pv url="product/approve.do">
 					<a href="${basePath}product/approve.do?manageKey=${tempBean.manageKey}"  
 							rel="manageKeys" target="dialogTodo" title="<spring:message code="funcs.Product.update"></spring:message>"> 
 						审核
 					</a>
 				</n:pv>
+				</c:if>
 			</c:if>
 			</td>

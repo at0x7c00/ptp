@@ -104,6 +104,7 @@
 			<tx:method name="calcuteBalance*" propagation="REQUIRED"/>
 			<tx:method name="updateBalance*" propagation="REQUIRED"/>
 			<tx:method name="updateStorageNum*" propagation="REQUIRED"/>
+			<tx:method name="mkQrCode*" propagation="REQUIRED"/>
 			<!-- 其它方法也支持事务，但数据是只读的（不能更改）-->
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>

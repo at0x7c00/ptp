@@ -30,7 +30,7 @@ public class QrCode {
 	}
 	
 	// 生成QR图
-	private BufferedImage createQRCodeBitmap(String text,BufferedImage base) {
+	public static BufferedImage createQRCodeBitmap(String text,BufferedImage base) {
 	    int QR_WIDTH = 325, QR_HEIGHT = 325;
 	    try {
 	        // 需要引入core包
