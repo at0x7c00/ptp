@@ -3,11 +3,11 @@
 <section id="widget-grid" class="">
 	<div class="row">
 		<article class="col-sm-12 col-md-12 col-lg-12">
-			<form:form method="post" action="product/${my ? 'myUpdate':'update'}.do"
+			<form:form method="post" action="product/update.do"
 					   class="smart-form required-validate" commandName="product"
 				onsubmit="return validateCallback(this, ${targetPanel eq 'dialog' ? 'dialog' :'navTab' }AjaxDone);">
 				<input type="hidden" name="targetPanel" value="${targetPanel}"/>
-				<input type="hidden" name="manageKey" value="${product.manageKey}"/>
+				<input type="hidden" name="manageKey" value="product.manageKey"/>
 				<ul id="myTab1" class="nav nav-tabs bordered">
 					<li class="active"><a href="#baseProperties" data-toggle="tab"><spring:message code="base.common.form.props"/></a></li>
 					<%@include file="/WEB-INF/jsp/product/form-tab-title.jsp" %>
@@ -16,20 +16,19 @@
 					<div class="tab-pane fade in active" id="baseProperties">	
 						<fieldset>
 							<div class="row">
-								<%@include file="/WEB-INF/jsp/product/update-form.jsp" %>
+								<%@include file="/WEB-INF/jsp/product/detail-form.jsp" %>
 							</div>
 						</fieldset>
 					</div>
-					<%@include file="/WEB-INF/jsp/product/update-x2many-form.jsp" %>
+					<%@include file="/WEB-INF/jsp/product/detail-x2many-form.jsp" %>
 				</div>
+				<c:if test="${not (showOk  eq 'no' )}">
 				<footer>
-					<button type="submit" class="btn btn-primary smart-form-submit-btn">
+					<button type="button" class="btn btn-default btn-cancel" data-targetpanel = "${targetPanel}">
 						<spring:message code="base.common.ok"></spring:message>
 					</button>
-					<button type="button" class="btn btn-default btn-cancel" data-targetpanel = "${targetPanel}">
-						<spring:message code="base.common.cancel"></spring:message>
-					</button>
 				</footer>
+				</c:if>
 			</form:form>
 		</article>
 	</div>

@@ -3,7 +3,7 @@
 <section id="widget-grid" class="">
 	<div class="row">
 		<article class="col-sm-12 col-md-12 col-lg-12">
-			<form:form method="post" action="product/${my ? 'myUpdate':'update'}.do"
+			<form:form method="post" action="product/approve.do"
 					   class="smart-form required-validate" commandName="product"
 				onsubmit="return validateCallback(this, ${targetPanel eq 'dialog' ? 'dialog' :'navTab' }AjaxDone);">
 				<input type="hidden" name="targetPanel" value="${targetPanel}"/>
@@ -16,11 +16,11 @@
 					<div class="tab-pane fade in active" id="baseProperties">	
 						<fieldset>
 							<div class="row">
-								<%@include file="/WEB-INF/jsp/product/update-form.jsp" %>
+								<%@include file="/WEB-INF/jsp/product/approve-form.jsp" %>
 							</div>
 						</fieldset>
 					</div>
-					<%@include file="/WEB-INF/jsp/product/update-x2many-form.jsp" %>
+					<%@include file="/WEB-INF/jsp/product/detail-x2many-form.jsp" %>
 				</div>
 				<footer>
 					<button type="submit" class="btn btn-primary smart-form-submit-btn">

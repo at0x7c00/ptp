@@ -38,13 +38,7 @@
 												<a class="btn btn-primary" href="${basePath}product/myAdd.do" target="dialogTodo" title="<spring:message code="funcs.Product.add"></spring:message>"  id="addBtn"><i class="fa fa-plus"></i> <spring:message code="base.function.add"/></a>
 											</n:pv>
 											<n:pv url="product/myDelete.do">
-												<a class="btn btn-danger" href="${basePath}product/delete.do?manageKeys={manageKeys}" target="ajaxTodo" confirm="<spring:message code="dwz.framework.dialog.confirmofdelete"></spring:message>" warn="<spring:message code="dwz.framework.dialog.pleaseselecttodelete"></spring:message>"><i class="fa fa-trash-o"></i> <spring:message code="base.function.delete"/></a>
-											</n:pv>
-											<n:pv url="product/myUpdate.do">
-												<a class="btn btn-warning" href="${basePath}product/update.do?manageKey={manageKeys}"  rel="manageKeys" target="dialogTodo" title="<spring:message code="funcs.Product.update"></spring:message>" data-mustone="true" data-onlyone="true"><i class="fa fa-edit"></i> <spring:message code="base.function.update"/></a>
-											</n:pv>
-											<n:pv url="product/myDetail.do">
-												<a class="btn btn-primary" href="${basePath}product/detail.do?manageKey={manageKeys}" rel="manageKeys" target="dialogTodo" title="<spring:message code="base.function.view"></spring:message>" style="padding:5px 15px;" data-mustone="true" data-onlyone="true" id="viewBtn"><i class="fa fa-eye"></i> <spring:message code="base.function.view"/></a>
+												<a class="btn btn-danger" href="${basePath}product/myDelete.do?manageKeys={manageKeys}" target="ajaxTodo" confirm="<spring:message code="dwz.framework.dialog.confirmofdelete"></spring:message>" warn="<spring:message code="dwz.framework.dialog.pleaseselecttodelete"></spring:message>"><i class="fa fa-trash-o"></i> <spring:message code="base.function.delete"/></a>
 											</n:pv>
 											<n:pv url="product/export.do">
 												<a class="btn btn-primary" href="${basePath}product/export.do" data-model="me.huqiao.smallcms.trace.entity.Product"  target="nuiExport" title="<spring:message code="base.function.export"></spring:message>"  data-mustone="true" data-onlyone="true" id="exportBtn"><i class="fa fa-external-link"></i> <spring:message code="base.function.export"/></a>

@@ -25,7 +25,7 @@ public class RegisterApplyServiceImpl extends BaseServiceImpl<RegisterApply> imp
     public Page<RegisterApply> getListPage(RegisterApply registerApply,Page pageInfo) {
       	pageInfo.setTotalCount(registerApplyDao.findListRowCount(registerApply).intValue());
 		pageInfo.setOrderField(pageInfo.getOrderField() == null ? "id": pageInfo.getOrderField());
-		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "asc": pageInfo.getOrderDirection());
+		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "desc": pageInfo.getOrderDirection());
 		pageInfo.setList(registerApplyDao.findListPage(registerApply,pageInfo));
         return pageInfo;
     }
@@ -33,7 +33,7 @@ public class RegisterApplyServiceImpl extends BaseServiceImpl<RegisterApply> imp
 	public Page<HistoryRecord<RegisterApply>> getHistoryListPage(RegisterApply registerApply, Page pageInfo) {
 		pageInfo.setTotalCount(registerApplyDao.findHistoryListRowCount(registerApply,pageInfo).intValue());
 		pageInfo.setOrderField(pageInfo.getOrderField() == null ? "id": pageInfo.getOrderField());
-		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "asc": pageInfo.getOrderDirection());
+		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "desc": pageInfo.getOrderDirection());
 		pageInfo.setList(registerApplyDao.findHistoryListPage(registerApply,pageInfo));
         return pageInfo;
 	}

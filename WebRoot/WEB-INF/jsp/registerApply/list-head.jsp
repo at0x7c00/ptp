@@ -24,6 +24,6 @@
 			<th align="center" data-sortfield="status" class="${nfn:sortClass(pageBean,'status')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.RegisterApply.status"/>
 		</th>
-			<th align="center" data-sortfield="dealRemak" class="${nfn:sortClass(pageBean,'dealRemak')}">
-			<spring:message code="props.me.huqiao.smallcms.trace.entity.RegisterApply.dealRemak"/>
+		<th align="center" data-sortfield="dealRemak" class="${nfn:sortClass(pageBean,'dealRemak')}">
+			操作
 		</th>

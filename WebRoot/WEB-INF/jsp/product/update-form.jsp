@@ -114,6 +114,7 @@
 											maxlength="255" />
 				</label>
 				</section>
+				<c:if test="${not my }">
 				<section class="col col-3">
 					<label class="input">
 						<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.status"/>:
@@ -126,7 +127,6 @@
 								</label>
 				</label>
 				</section>
-				<c:if test="${not my }">
 				<section class="col col-3">
 					<label class="input">
 						<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.creator"/>:

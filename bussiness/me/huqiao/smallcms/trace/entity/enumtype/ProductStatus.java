@@ -7,7 +7,7 @@ import java.util.Map;
  * @version Version 1.0
  */
 public enum ProductStatus{
-    UnApprove("待审核"),Failed("审核失败"),Success("审核成功"),Down("下架");
+	UnSubmit("未提交"),UnApprove("待审核"),Failed("审核失败"),Success("审核成功"),Up("上架"),Down("下架");
  /**  description 描述信息*/
     private String description;
     private ProductStatus(String description){this.description = description;}

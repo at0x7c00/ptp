@@ -1,4 +1,5 @@
 package me.huqiao.smallcms.trace.entity;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,45 +40,45 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="trace_register_apply")
 @JsonIgnoreProperties( value={"hibernateLazyInitializer","handler"})
-public class RegisterApply
-{
-/**唯一识别ID号 */
-protected Integer id;
-	/**@param id 要设置的唯一标示号*/
-public void setId(Integer id){this.id=id;}
-@Id
-@GeneratedValue(strategy=GenerationType.AUTO)
-@Column(columnDefinition="integer")
-	/**@return Integer 唯一标示号*/
-public Integer getId(){return this.id;}
-/**法人*/
-private String lawPerson;
-/**公司地址*/
-private String address;
-/**联系人*/
-private String contact;
-/**公司名称*/
-private String name;
-/**联系电话*/
-private String telq;
-/**邮箱*/
-private String email;
-/**营业执照*/
-private CommonFile license;
-	/**营业执照模糊查询条件*/
-private String licenseQuery;
-/**法人身份证*/
-private CommonFile lawPersonIDCard;
-	/**法人身份证模糊查询条件*/
-private String lawPersonIDCardQuery;
-/**其他资质*/
-private Set<CommonFile> otherQualifications;
-	/**其他资质临时集合*/
-private List<CommonFile> otherQualificationsList;
-/**状态*/
-private RegisterApplyStatus status;
-/**处理备注*/
-private String dealRemak;
+public class RegisterApply{
+	/**唯一识别ID号 */
+	protected Integer id;
+		/**@param id 要设置的唯一标示号*/
+	public void setId(Integer id){this.id=id;}
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(columnDefinition="integer")
+		/**@return Integer 唯一标示号*/
+	public Integer getId(){return this.id;}
+	/**法人*/
+	private String lawPerson;
+	/**公司地址*/
+	private String address;
+	/**联系人*/
+	private String contact;
+	/**公司名称*/
+	private String name;
+	/**联系电话*/
+	private String telq;
+	/**邮箱*/
+	private String email;
+	/**营业执照*/
+	private CommonFile license;
+		/**营业执照模糊查询条件*/
+	private String licenseQuery;
+	/**法人身份证*/
+	private CommonFile lawPersonIDCard;
+		/**法人身份证模糊查询条件*/
+	private String lawPersonIDCardQuery;
+	/**其他资质*/
+	private Set<CommonFile> otherQualifications;
+		/**其他资质临时集合*/
+	private List<CommonFile> otherQualificationsList;
+	/**状态*/
+	private RegisterApplyStatus status;
+	private Date applyDate;
+	/**处理备注*/
+	private String dealRemak;
 	/**MD5管理ID*/
 	protected String manageKey;
 	
@@ -95,158 +96,158 @@ private String dealRemak;
 	public void setManageKey(String manageKey) {
 		this.manageKey = manageKey;
 	}
-/**
- * @param lawPerson 要设置的法人
- */
-public void setLawPerson(String lawPerson){
-    this.lawPerson = lawPerson;
-}
-/**
- * @return String 法人 
- */
-@Column(name="law_person",length=255,nullable=true)
-public String getLawPerson(){
-		return this.lawPerson;	
-}
-/**
- * @param address 要设置的公司地址
- */
-public void setAddress(String address){
-    this.address = address;
-}
-/**
- * @return String 公司地址 
- */
-@Column(name="address",length=255,nullable=true)
-public String getAddress(){
-		return this.address;	
-}
-/**
- * @param contact 要设置的联系人
- */
-public void setContact(String contact){
-    this.contact = contact;
-}
-/**
- * @return String 联系人 
- */
-@Column(name="_contact",length=255,nullable=true)
-public String getContact(){
-		return this.contact;	
-}
-/**
- * @param name 要设置的公司名称
- */
-public void setName(String name){
-    this.name = name;
-}
-/**
- * @return String 公司名称 
- */
-@Column(name="name",length=255,nullable=true)
-public String getName(){
-		return this.name;	
-}
-/**
- * @param telq 要设置的联系电话
- */
-public void setTelq(String telq){
-    this.telq = telq;
-}
-/**
- * @return String 联系电话 
- */
-@Column(name="tel",length=255,nullable=true)
-public String getTelq(){
-		return this.telq;	
-}
-/**
- * @param email 要设置的邮箱
- */
-public void setEmail(String email){
-    this.email = email;
-}
-/**
- * @return String 邮箱 
- */
-@Column(name="email",length=255,nullable=true)
-public String getEmail(){
-		return this.email;	
-}
-/**
- * @param license 要设置的营业执照
- */
-public void setLicense(CommonFile license){
-    this.license = license;
-}
-/**
- * @param licenseQuery 要设置的营业执照模糊查询条件
- */
-public void setLicenseQuery(String licenseQuery){
-    this.licenseQuery = licenseQuery;
-}
-/**
- * @return CommonFile 营业执照 
- */
-@ManyToOne(targetEntity=me.huqiao.smallcms.common.entity.CommonFile.class,fetch=FetchType.LAZY)
-@JoinColumn(name="license",nullable=true)
-@Fetch(FetchMode.SELECT)
-@JsonIgnore
-public CommonFile getLicense(){
-		return this.license;	
-}
-/**
- * @return  String 营业执照模糊查询条件
- */
-@Transient
-public String getLicenseQuery(){
-    return this.licenseQuery;
-}
-/**
- * @param lawPersonIDCard 要设置的法人身份证
- */
-public void setLawPersonIDCard(CommonFile lawPersonIDCard){
-    this.lawPersonIDCard = lawPersonIDCard;
-}
-/**
- * @param lawPersonIDCardQuery 要设置的法人身份证模糊查询条件
- */
-public void setLawPersonIDCardQuery(String lawPersonIDCardQuery){
-    this.lawPersonIDCardQuery = lawPersonIDCardQuery;
-}
-/**
- * @return CommonFile 法人身份证 
- */
-@ManyToOne(targetEntity=me.huqiao.smallcms.common.entity.CommonFile.class,fetch=FetchType.LAZY)
-@JoinColumn(name="id_card",nullable=true)
-@Fetch(FetchMode.SELECT)
-@JsonIgnore
-public CommonFile getLawPersonIDCard(){
-		return this.lawPersonIDCard;	
-}
-/**
- * @return  String 法人身份证模糊查询条件
- */
-@Transient
-public String getLawPersonIDCardQuery(){
-    return this.lawPersonIDCardQuery;
-}
-/**
- * @param otherQualifications 要设置的其他资质
- */
-public void setOtherQualifications(Set<CommonFile> otherQualifications){
-    this.otherQualifications = otherQualifications;
-}
-/**
- * @return Set<CommonFile> 其他资质 
- */
-@ManyToMany(targetEntity = CommonFile.class,fetch = FetchType.LAZY)
-@JoinTable(name = "lnk_regist_apply_filee_quali", joinColumns = { @JoinColumn(name = "apply_id") }, inverseJoinColumns = { @JoinColumn(name = "filee_id") })
-@Fetch(FetchMode.SELECT)
-@OrderBy("id")
-public Set<CommonFile> getOtherQualifications(){
-		return this.otherQualifications;	
-}
+	/**
+	 * @param lawPerson 要设置的法人
+	 */
+	public void setLawPerson(String lawPerson){
+	    this.lawPerson = lawPerson;
+	}
+	/**
+	 * @return String 法人 
+	 */
+	@Column(name="law_person",length=255,nullable=true)
+	public String getLawPerson(){
+			return this.lawPerson;	
+	}
+	/**
+	 * @param address 要设置的公司地址
+	 */
+	public void setAddress(String address){
+	    this.address = address;
+	}
+	/**
+	 * @return String 公司地址 
+	 */
+	@Column(name="address",length=255,nullable=true)
+	public String getAddress(){
+			return this.address;	
+	}
+	/**
+	 * @param contact 要设置的联系人
+	 */
+	public void setContact(String contact){
+	    this.contact = contact;
+	}
+	/**
+	 * @return String 联系人 
+	 */
+	@Column(name="_contact",length=255,nullable=true)
+	public String getContact(){
+			return this.contact;	
+	}
+	/**
+	 * @param name 要设置的公司名称
+	 */
+	public void setName(String name){
+	    this.name = name;
+	}
+	/**
+	 * @return String 公司名称 
+	 */
+	@Column(name="name",length=255,nullable=true)
+	public String getName(){
+			return this.name;	
+	}
+	/**
+	 * @param telq 要设置的联系电话
+	 */
+	public void setTelq(String telq){
+	    this.telq = telq;
+	}
+	/**
+	 * @return String 联系电话 
+	 */
+	@Column(name="tel",length=255,nullable=true)
+	public String getTelq(){
+			return this.telq;	
+	}
+	/**
+	 * @param email 要设置的邮箱
+	 */
+	public void setEmail(String email){
+	    this.email = email;
+	}
+	/**
+	 * @return String 邮箱 
+	 */
+	@Column(name="email",length=255,nullable=true)
+	public String getEmail(){
+			return this.email;	
+	}
+	/**
+	 * @param license 要设置的营业执照
+	 */
+	public void setLicense(CommonFile license){
+	    this.license = license;
+	}
+	/**
+	 * @param licenseQuery 要设置的营业执照模糊查询条件
+	 */
+	public void setLicenseQuery(String licenseQuery){
+	    this.licenseQuery = licenseQuery;
+	}
+	/**
+	 * @return CommonFile 营业执照 
+	 */
+	@ManyToOne(targetEntity=me.huqiao.smallcms.common.entity.CommonFile.class,fetch=FetchType.LAZY)
+	@JoinColumn(name="license",nullable=true)
+	@Fetch(FetchMode.SELECT)
+	@JsonIgnore
+	public CommonFile getLicense(){
+			return this.license;	
+	}
+	/**
+	 * @return  String 营业执照模糊查询条件
+	 */
+	@Transient
+	public String getLicenseQuery(){
+	    return this.licenseQuery;
+	}
+	/**
+	 * @param lawPersonIDCard 要设置的法人身份证
+	 */
+	public void setLawPersonIDCard(CommonFile lawPersonIDCard){
+	    this.lawPersonIDCard = lawPersonIDCard;
+	}
+	/**
+	 * @param lawPersonIDCardQuery 要设置的法人身份证模糊查询条件
+	 */
+	public void setLawPersonIDCardQuery(String lawPersonIDCardQuery){
+	    this.lawPersonIDCardQuery = lawPersonIDCardQuery;
+	}
+	/**
+	 * @return CommonFile 法人身份证 
+	 */
+	@ManyToOne(targetEntity=me.huqiao.smallcms.common.entity.CommonFile.class,fetch=FetchType.LAZY)
+	@JoinColumn(name="id_card",nullable=true)
+	@Fetch(FetchMode.SELECT)
+	@JsonIgnore
+	public CommonFile getLawPersonIDCard(){
+			return this.lawPersonIDCard;	
+	}
+	/**
+	 * @return  String 法人身份证模糊查询条件
+	 */
+	@Transient
+	public String getLawPersonIDCardQuery(){
+	    return this.lawPersonIDCardQuery;
+	}
+	/**
+	 * @param otherQualifications 要设置的其他资质
+	 */
+	public void setOtherQualifications(Set<CommonFile> otherQualifications){
+	    this.otherQualifications = otherQualifications;
+	}
+	/**
+	 * @return Set<CommonFile> 其他资质 
+	 */
+	@ManyToMany(targetEntity = CommonFile.class,fetch = FetchType.LAZY)
+	@JoinTable(name = "lnk_regist_apply_filee_quali", joinColumns = { @JoinColumn(name = "apply_id") }, inverseJoinColumns = { @JoinColumn(name = "filee_id") })
+	@Fetch(FetchMode.SELECT)
+	@OrderBy("id")
+	public Set<CommonFile> getOtherQualifications(){
+			return this.otherQualifications;	
+	}
 	/**
 	 * @return  CommonFile 获取getOtherQualifications对应的临时集合
 	 */
@@ -284,33 +285,33 @@ public Set<CommonFile> getOtherQualifications(){
 			}
 		}
 	}
-/**
- * @param status 要设置的状态
- */
-public void setStatus(RegisterApplyStatus status){
-    this.status = status;
-}
-/**
- * @return RegisterApplyStatus 状态 
- */
-@Column(name="status",nullable=true,columnDefinition="enum('UnDeal','Failed','Succes')")
-@Enumerated(EnumType.STRING)
-public RegisterApplyStatus getStatus(){
-		return this.status;	
-}
-/**
- * @param dealRemak 要设置的处理备注
- */
-public void setDealRemak(String dealRemak){
-    this.dealRemak = dealRemak;
-}
-/**
- * @return String 处理备注 
- */
-@Column(name="deal_remak",length=255,columnDefinition="text",nullable=true)
-public String getDealRemak(){
-		return this.dealRemak;	
-}
+	/**
+	 * @param status 要设置的状态
+	 */
+	public void setStatus(RegisterApplyStatus status){
+	    this.status = status;
+	}
+	/**
+	 * @return RegisterApplyStatus 状态 
+	 */
+	@Column(name="status",nullable=true,columnDefinition="enum('UnDeal','Failed','Succes')")
+	@Enumerated(EnumType.STRING)
+	public RegisterApplyStatus getStatus(){
+			return this.status;	
+	}
+	/**
+	 * @param dealRemak 要设置的处理备注
+	 */
+	public void setDealRemak(String dealRemak){
+	    this.dealRemak = dealRemak;
+	}
+	/**
+	 * @return String 处理备注 
+	 */
+	@Column(name="deal_remak",length=255,columnDefinition="text",nullable=true)
+	public String getDealRemak(){
+			return this.dealRemak;	
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -382,5 +383,14 @@ public String getDealRemak(){
 		return success ? JsonResult.success(msg.toString()) : JsonResult.error(msg.toString());
 		
 	}
+	
+	@Column(name = "apply_date" ,nullable = true)
+	public Date getApplyDate() {
+		return applyDate;
+	}
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
+	}
+	
 	
 }

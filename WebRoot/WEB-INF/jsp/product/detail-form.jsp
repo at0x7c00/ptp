@@ -9,6 +9,16 @@
 			</span>
 		</label>
 	</section>
+	<section class="col col-12">
+		<label class="input"
+						   <c:if test="${checkResult['category'].changed}">title= "${checkResult['category'].info}";</c:if>
+						   >
+			<span class="${checkResult['category'].changed ? 'change-markup':''}">
+						<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.category"/>:
+									${tempBean.category.fullName}
+			</span>
+		</label>
+	</section>
 	<section class="col col-3">
 		<label class="input"
 						   <c:if test="${checkResult['brand'].changed}">title= "${checkResult['brand'].info}";</c:if>
@@ -16,16 +26,6 @@
 			<span class="${checkResult['brand'].changed ? 'change-markup':''}">
 						<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.brand"/>:
 									<c:out value="${tempBean.brand}"/>
-			</span>
-		</label>
-	</section>
-	<section class="col col-3">
-		<label class="input"
-						   <c:if test="${checkResult['category'].changed}">title= "${checkResult['category'].info}";</c:if>
-						   >
-			<span class="${checkResult['category'].changed ? 'change-markup':''}">
-						<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.category"/>:
-									${tempBean.category.fullName}
 			</span>
 		</label>
 	</section>
@@ -119,6 +119,7 @@
 			</span>
 		</label>
 	</section>
+	<c:if test="${not my }">
 	<section class="col col-3">
 		<label class="input"
 						   <c:if test="${checkResult['creator'].changed}">title= "${checkResult['creator'].info}";</c:if>
@@ -128,4 +129,26 @@
 									${tempBean.creator.chineseName}
 			</span>
 		</label>
+	</section>
+	</c:if>
+	<section class="col col-12">
+	<h4>操作日志</h4>
+	<table class="table">
+		<thead>
+			<tr>
+			<th width="250px">操作人</th>
+			<th width="130px">时间</th>
+			<th>备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${tempBean.logs }" var="log">
+				<tr>
+					<td>${log.operator }</td>
+					<td><fmt:formatDate value="${log.createDate }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+					<td>${log.remark }</td>
+			    </tr>
+			</c:forEach>
+		</tbody>	
+	</table>
 	</section>

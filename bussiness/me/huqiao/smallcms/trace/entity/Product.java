@@ -1,5 +1,6 @@
 package me.huqiao.smallcms.trace.entity;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,17 +17,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletRequest;
 
 import me.huqiao.smallcms.common.entity.CommonFile;
+import me.huqiao.smallcms.sys.entity.Department;
 import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.trace.entity.enumtype.ProductStatus;
 import me.huqiao.smallcms.util.Md5Util;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -90,6 +95,7 @@ private Set<CommonFile> checkPictures;
 private List<CommonFile> checkPicturesList;
 /**其他资质*/
 private Set<CommonFile> otherQualifications;
+private Set<ProductLog> logs;
 	/**其他资质临时集合*/
 private List<CommonFile> otherQualificationsList;
 /**联系电话*/
@@ -100,6 +106,7 @@ private ProductStatus status;
 private User creator;
 	/**所属用户模糊查询条件*/
 private String creatorQuery;
+
 	/**MD5管理ID*/
 	protected String manageKey;
 	
@@ -502,7 +509,7 @@ public void setStatus(ProductStatus status){
 /**
  * @return ProductStatus 状态 
  */
-@Column(name="status",nullable=true,columnDefinition="enum('UnApprove','Failed','Success','Down')")
+@Column(name="status",nullable=true,columnDefinition="enum('UnSubmit','UnApprove','Failed','Success','Up','Down')")
 @Enumerated(EnumType.STRING)
 public ProductStatus getStatus(){
 		return this.status;	
@@ -575,6 +582,81 @@ public String getCreatorQuery(){
 		this.uuid = uuid;
 	}
 	
+	@Transient
+	public String getStatusStyle(){
+		if(getStatus()==ProductStatus.UnSubmit){
+			return "bg-color-blueDark";
+		}else if(getStatus()==ProductStatus.UnApprove){
+			return "bg-color-yellow";
+		}else if(getStatus()==ProductStatus.Failed){
+			return "bg-color-red";
+		}else if(getStatus()==ProductStatus.Success){
+			return "bg-color-green";
+		}else if(getStatus()==ProductStatus.Down){
+			return "bg-color-blueLight";
+		}else if(getStatus()==ProductStatus.Up){
+			return "bg-color-greenLight";
+		}
+		return "";
+	}
 	
+	@Transient
+	public boolean getCanUpdate(){
+		return status == ProductStatus.UnSubmit || status==ProductStatus.Failed;
+	}
 	
+	@Transient
+	public boolean getCanCancel(){
+		return status == ProductStatus.UnApprove;
+	}
+	
+	@Transient
+	public boolean getCanSubmit(){
+		return status == ProductStatus.UnSubmit || status==ProductStatus.Failed;
+	}
+	
+	@Transient
+	public boolean getCanDown(){
+		return status == ProductStatus.Success || status == ProductStatus.Up;
+	}
+	
+	@Transient
+	public boolean getCanUp(){
+		return status == ProductStatus.Success || status == ProductStatus.Down;
+	}
+	
+	@Transient
+	public boolean getCanDownAndEdit(){
+		return status == ProductStatus.Success || status == ProductStatus.Up || status == ProductStatus.Down;
+	}
+	
+	@Transient
+	public boolean getCanApprove(){
+		return status == ProductStatus.UnApprove;
+	}
+	
+	@OneToMany(targetEntity = ProductLog.class, mappedBy = "product", fetch = FetchType.LAZY)
+	@Fetch(FetchMode.SELECT)
+	@OrderBy("id")
+	@Cascade(value = { CascadeType.DELETE, CascadeType.SAVE_UPDATE, CascadeType.DELETE_ORPHAN })
+	@JsonIgnore
+	public Set<ProductLog> getLogs() {
+		return logs;
+	}
+	public void setLogs(Set<ProductLog> logs) {
+		this.logs = logs;
+	}
+	
+	@Transient
+	public void addLog(String operator,String remark){
+		ProductLog log = new ProductLog();
+		log.setCreateDate(new Date());
+		log.setOperator(operator);
+		log.setRemark(remark);
+		log.setProduct(this);
+		if(logs==null){
+			logs = new HashSet<ProductLog>();
+		}
+		logs.add(log);
+	}
 }

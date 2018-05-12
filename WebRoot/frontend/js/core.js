@@ -164,6 +164,35 @@ $(function(){
 	});
 	$("form .form-input>input.username").each(function(){
 		var _this = $(this);
+		_this.change(function(){
+			var val = $(this).val();
+			var _this = $(this);
+			$.ajax({
+				method:"get",
+				url:basePath + "usernameValidate.do?username=" + val,
+				success:function(d){
+					if(d.statusCode!='200'){
+						toastr["warning"]("服务器异常:"+d.message);
+					}else{
+						if(d.message=="OK"){
+							_this.removeClass("invalid");
+							toastr["success"]("该用户名可用！");
+						}else{
+							_this.addClass("invalid");
+							toastr["warning"]("该用户名已存在！");
+						}
+					}
+				},
+				error:function(xhr, ajaxOptions, thrownError){
+					ajaxError(xhr,ajaxOptions,thrownError);
+					_this.removeClass("unuseable");
+				}
+			});
+		});
+	});
+	
+	$("form .form-input>input.mobilenum.unique").each(function(){
+		var _this = $(this);
 		_this.blur(function(){
 			var val = $(this).val();
 			if(!val.isUsername()){
@@ -183,17 +212,17 @@ $(function(){
 			var _this = $(this);
 			$.ajax({
 				method:"get",
-				url:basePath + "usernameValidate.do?username=" + val,
+				url:basePath + "mobileNumUniqueValidate.do?mobileNum=" + val,
 				success:function(d){
 					if(d.statusCode!='200'){
 						toastr["warning"]("服务器异常:"+d.message);
 					}else{
 						if(d.message=="OK"){
 							_this.removeClass("invalid");
-							toastr["success"]("该用户名可用！");
+							toastr["success"]("手机号可用!");
 						}else{
 							_this.addClass("invalid");
-							toastr["warning"]("该用户名已存在！");
+							toastr["warning"]("该手机号被绑定，请使用其他手机号码，或找回密码！");
 						}
 					}
 				},

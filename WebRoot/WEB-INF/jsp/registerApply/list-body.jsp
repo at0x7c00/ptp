@@ -1,7 +1,9 @@
 <%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 	<td>${tempBean.id}</td>
 		<td>
-		${tempBean.name}
+		<a href="${basePath}registerApply/detail.do?manageKey=${tempBean.manageKey}" target="dialogTodo" title="查看申请">
+			${tempBean.name}
+		</a>
 		</td>
 		<td>
 		${tempBean.lawPerson}
@@ -26,8 +28,17 @@
 		</a>
 		</td>
 		<td>
+		<span style="color:${tempBean.status eq 'UnDeal'?'gray':(tempBean.status eq 'Failed'?'red':'green')};">
 		${registerApplyStatusMap[tempBean.status]}
+		</span>
 		</td>
 		<td>
-		${tempBean.dealRemak}
+		<c:if test="${tempBean.status eq 'UnDeal'}">
+		<a href="${basePath}registerApply/approve.do?manageKey=${tempBean.manageKey}" target="dialogTodo" title="申请审核">
+			审核
+		</a>
+		</c:if>
+		
+		
+		
 		</td>

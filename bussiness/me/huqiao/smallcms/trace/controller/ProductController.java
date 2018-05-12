@@ -26,6 +26,7 @@ import me.huqiao.smallcms.trace.service.ICategoryService;
 import me.huqiao.smallcms.trace.service.IProductService;
 import me.huqiao.smallcms.trace.util.ShortUrlGenerator;
 import me.huqiao.smallcms.util.Md5Util;
+import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
 
@@ -181,10 +182,11 @@ public class ProductController  extends BaseController {
 		
 		product.setManageKey(Md5Util.getManageKey());
 		User u = product.getCreator();
-		RegisterApply apply = u.getRegisterApply();
 		String uuid = ShortUrlGenerator.generateShortUuid();
-		uuid = apply.getId() + "L" + uuid;
+		uuid = u.getRegisterApplyId() + "L" + uuid;
 		product.setUuid(uuid);
+		product.setStatus(ProductStatus.UnSubmit);
+		product.addLog(getCurrentUser().getDesc(),"添加商品");
     	productService.add(product);
         jsonResult.setMessage(getI18NMessage(request, "base.common.controller.operate.add.success"));
         return jsonResult;
@@ -230,6 +232,9 @@ public class ProductController  extends BaseController {
     public JsonResult myUpdate(HttpServletRequest request,
 	@ModelAttribute(value="product") Product product,
 	BindingResult result) {
+    	if(!product.getCanUpdate()){
+    		return JsonResult.error("非法操作，该商品状态为\"" + product.getStatus().getDescription() + "\",不允许进行修改操作!");
+    	}
     	product.setCreator(getCurrentUser());
     	return update(request,product,result);
     }
@@ -276,16 +281,143 @@ public class ProductController  extends BaseController {
 		}
 		product.getOtherQualifications().clear();
 		product.getOtherQualifications().addAll(otherQualificationseys);
-		
+		product.addLog(getCurrentUser().getDesc(),"修改商品");
         productService.update(product);
 	// jsonResult.setNavTabId(rel);
         jsonResult.setMessage(getI18NMessage(request, "base.common.controller.operate.update.success"));
         return jsonResult;
     }
     
+    @RequestMapping(value="/myUpdate",method=RequestMethod.POST,params = {"submit=yes"})
+    @ResponseBody
+    public JsonResult submit(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product,
+	BindingResult result) {
+    	try{
+    		if(product.getCanSubmit()){
+    			product.setStatus(ProductStatus.UnApprove);
+    			product.addLog(getCurrentUser().getDesc(),"提交审核");
+    			productService.update(product);
+    			return JsonResult.success("提交成功!");
+    		}else{
+    			return JsonResult.error("非法操作!");
+    		}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return JsonResult.error(e.getMessage());
+    	}
+    }
+    
+    @RequestMapping(value="/myUpdate",method=RequestMethod.POST,params = {"cancel=yes"})
+    @ResponseBody
+    public JsonResult cancel(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product,
+	BindingResult result) {
+    	try{
+    		if(product.getCanCancel()){
+    			product.setStatus(ProductStatus.UnSubmit);
+    			product.addLog(getCurrentUser().getDesc(),"取消审核");
+    			productService.update(product);
+    			return JsonResult.success("取消成功!");
+    		}else{
+    			return JsonResult.error("非法操作!");
+    		}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return JsonResult.error(e.getMessage());
+    	}
+    }
+    
+    
+    @RequestMapping(value="/myUpdate",method=RequestMethod.POST,params = {"down=yes"})
+    @ResponseBody
+    public JsonResult down(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product,
+	BindingResult result) {
+    	try{
+    		if(product.getCanDown()){
+    			product.setStatus(ProductStatus.Down);
+    			product.addLog(getCurrentUser().getDesc(),"下架");
+    			productService.update(product);
+    			return JsonResult.success("下架成功!");
+    		}else{
+    			return JsonResult.error("非法操作!");
+    		}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return JsonResult.error(e.getMessage());
+    	}
+    }
+    
+    @RequestMapping(value="/myUpdate",method=RequestMethod.POST,params = {"downAndEdit=yes"})
+    @ResponseBody
+    public JsonResult downAndEdit(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product,
+	BindingResult result) {
+    	try{
+    		if(product.getCanDownAndEdit()){
+    			product.setStatus(ProductStatus.UnSubmit);
+    			product.addLog(getCurrentUser().getDesc(),"下架重新修改");
+    			productService.update(product);
+    			return JsonResult.success("操作成功!");
+    		}else{
+    			return JsonResult.error("非法操作!");
+    		}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return JsonResult.error(e.getMessage());
+    	}
+    }
+    
+    @RequestMapping(value="/myUpdate",method=RequestMethod.POST,params = {"up=yes"})
+    @ResponseBody
+    public JsonResult up(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product,
+	BindingResult result) {
+    	try{
+    		if(product.getCanUp()){
+    			product.setStatus(ProductStatus.Up);
+    			product.addLog(getCurrentUser().getDesc(),"上架");
+    			productService.update(product);
+    			return JsonResult.success("上架成功!");
+    		}else{
+    			return JsonResult.error("非法操作!");
+    		}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return JsonResult.error(e.getMessage());
+    	}
+    }
+
+    
+    @RequestMapping(value="/approve",method=RequestMethod.GET)
+ 	public String approveUI(@ModelAttribute(value="product") Product product,HttpServletRequest request) {
+    	updateUI(product,request);
+    	return "product/approve";
+    }
+    
+    @RequestMapping(value="/approve",method=RequestMethod.POST)
+    @ResponseBody
+    public JsonResult approve(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product,@RequestParam(value = "remark",required = false)String remark,
+	BindingResult result) {
+    	try{
+    		if(product.getCanApprove()){
+    			product.addLog(getCurrentUser().getDesc(),"审核:"+(StringUtil.isEmpty(remark) ? "" : remark));
+    			productService.update(product);
+    			return JsonResult.success("审核成功!");
+    		}else{
+    			return JsonResult.error("非法操作!");
+    		}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return JsonResult.error(e.getMessage());
+    	}
+    }
     
     @RequestMapping(value="/myDetail",method=RequestMethod.GET)
   	public void myDetail(@ModelAttribute(value="product") Product product,HttpServletRequest request) {
+    	request.setAttribute("my", true);
     	detail(product,request);
     }
     
@@ -297,8 +429,7 @@ public class ProductController  extends BaseController {
      */
     @RequestMapping(value="/detail",method=RequestMethod.GET)
 	public void detail(@ModelAttribute(value="product") Product product,HttpServletRequest request) {
-	request.setAttribute("tempBean", product);
-    	//复杂关联关系数据准备
+    	request.setAttribute("tempBean", product);
         listFormParam(request,product,null);
     }
     
@@ -363,7 +494,7 @@ public class ProductController  extends BaseController {
 	 /**
 	  *选择对象返回html
       *@param request HttpServletRequest对象
-	  *@param manageKeys manageKey 数组
+      *@param manageKeys manageKey 数组
 	  *@return String 返回jsp页面路径
       */
 	@RequestMapping(value = "/selectList",params = "htmlType")

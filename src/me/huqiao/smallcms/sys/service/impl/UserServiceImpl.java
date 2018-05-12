@@ -12,12 +12,18 @@ import javax.annotation.Resource;
 import me.huqiao.smallcms.common.entity.enumtype.DayOfWeek;
 import me.huqiao.smallcms.common.service.impl.BaseServiceImpl;
 import me.huqiao.smallcms.sys.dao.IUserDao;
+import me.huqiao.smallcms.sys.entity.Department;
 import me.huqiao.smallcms.sys.entity.Role;
 import me.huqiao.smallcms.sys.entity.User;
+import me.huqiao.smallcms.sys.entity.enumtype.UserStatus;
 import me.huqiao.smallcms.sys.service.IConfigService;
+import me.huqiao.smallcms.sys.service.IDepartmentService;
 import me.huqiao.smallcms.sys.service.IRoleService;
 import me.huqiao.smallcms.sys.service.IUserService;
+import me.huqiao.smallcms.trace.entity.RegisterApply;
+import me.huqiao.smallcms.util.Md5Util;
 import me.huqiao.smallcms.util.StringUtil;
+import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.springframework.stereotype.Service;
@@ -35,6 +41,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 	private IUserDao userDao;
 	@Resource
 	private IRoleService roleService;
+	@Resource
+	private IDepartmentService deptService;
 	@Resource
 	private IConfigService configService;
 	
@@ -120,6 +128,28 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 			user = getEntityByProperty(User.class, "phone", number);
 		}
 		return user;
+	}
+
+	@Override
+	public JsonResult addUserForApply(RegisterApply registerApply) {
+		if(getById(User.class, registerApply.getUsername())!=null){
+			return JsonResult.error("用户名：" +  registerApply.getUsername()+"已经存在了，请换一个用户名试试!");
+		}
+		Department dept = deptService.getById(Department.class,3);
+		Role role = roleService.getById(Role.class,2);
+		User user = new User();
+		user.setUsername(registerApply.getUsername());
+		user.setPassword(Md5Util.getMD5Code(registerApply.getPassword()));
+		user.setChineseName(registerApply.getName());
+		user.setDept(dept);
+		Set<Role> roles = new HashSet<Role>();
+		roles.add(role);
+		user.setRoles(roles);
+		user.setEmail(registerApply.getEmail());
+		user.setPhone(registerApply.getMobileNumber());
+		user.setStatus(UserStatus.Active);
+		add(user);
+		return JsonResult.success("账号创建成功："+user.getUsername());
 	}
 	
 }

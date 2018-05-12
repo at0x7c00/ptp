@@ -96,7 +96,7 @@
 			
 			<div class="form-input">
 				<span class="form-input-title"><em class="required">*</em>手机号：</span>
-				<input type="text" name="mobileNumber" id="number" class="required blod mobilenum" maxlength="20"/>
+				<input type="text" name="mobileNumber" id="number" class="required blod mobilenum unique" maxlength="20"/>
 			</div>
 			<div class="form-input">
 				<span class="form-input-title"><em class="required">*</em>验证码：</span>

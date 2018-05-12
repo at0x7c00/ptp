@@ -1,5 +1,6 @@
 package me.huqiao.smallcms.trace.controller;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -161,6 +162,7 @@ public class FrontendContrller{
 				registerApply.setOtherQualifications(files);
 			}
 			
+			registerApply.setApplyDate(new Date());
 			registerApply.setStatus(RegisterApplyStatus.UnDeal);
 			registerApply.setManageKey(Md5Util.getManageKey());
 			applyService.add(registerApply);
@@ -358,9 +360,24 @@ public class FrontendContrller{
 	
 	@RequestMapping(value = "/usernameValidate",produces={"application/json"})
 	@ResponseBody
-	private JsonResult usernameValidate(@RequestParam("username")String username){
+	public JsonResult usernameValidate(@RequestParam("username")String username){
 		try{
 			User user = userService.getById(User.class, username);
+			if(user!=null){
+				return JsonResult.success("NO");
+			}else{
+				return JsonResult.success("OK");
+			}
+		}catch(Exception e){
+			return JsonResult.error(e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/mobileNumUniqueValidate",produces={"application/json"})
+	@ResponseBody
+	public JsonResult mobileNumUniqueValidate(@RequestParam("mobileNum")String mobileNum){
+		try{
+			User user = userService.getEntityByProperty(User.class, "phone",mobileNum);
 			if(user!=null){
 				return JsonResult.success("NO");
 			}else{

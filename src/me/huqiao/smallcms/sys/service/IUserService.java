@@ -4,6 +4,8 @@ import java.util.List;
 
 import me.huqiao.smallcms.common.service.IBaseService;
 import me.huqiao.smallcms.sys.entity.User;
+import me.huqiao.smallcms.trace.entity.RegisterApply;
+import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
 
 /**
@@ -61,5 +63,7 @@ public interface IUserService extends IBaseService<User> {
 	List<User> queryById(String[] userNames);
 
 	public User findByUsernameOfPhonenumber(String username, String number);
+
+	public JsonResult addUserForApply(RegisterApply registerApply);
 
 }

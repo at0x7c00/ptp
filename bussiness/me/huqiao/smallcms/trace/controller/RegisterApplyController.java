@@ -1,5 +1,6 @@
 package me.huqiao.smallcms.trace.controller;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,6 +13,8 @@ import me.huqiao.smallcms.common.entity.CommonFile;
 import me.huqiao.smallcms.common.entity.Select2;
 import me.huqiao.smallcms.common.entity.propertyeditor.CommonFileEditor;
 import me.huqiao.smallcms.common.service.ICommonFileService;
+import me.huqiao.smallcms.sys.entity.User;
+import me.huqiao.smallcms.sys.service.IUserService;
 import me.huqiao.smallcms.trace.entity.RegisterApply;
 import me.huqiao.smallcms.trace.entity.enumtype.RegisterApplyStatus;
 import me.huqiao.smallcms.trace.service.IRegisterApplyService;
@@ -40,6 +43,8 @@ public class RegisterApplyController  extends BaseController {
    /**注册申请服务*/
     @Resource
     private IRegisterApplyService registerApplyService;
+    @Resource
+    private IUserService userService;
  /**
   * 注册属性编辑器
   * @param binder 数据绑定器
@@ -119,16 +124,13 @@ public class RegisterApplyController  extends BaseController {
 	@RequestParam(value = "callBack",required = false)String callBack,
 	BindingResult result) {
     	JsonResult jsonResult = new JsonResult();
-    	//默认系统时间类型保存
-	/*
-		#ONE_TO_MANY_VALUE_SAVE_ADD
-	*/
 	    //保存多对多关联关系
 		registerApply.setLicense(parseFilee(request,"licenseKeys",null));
 		registerApply.setLawPersonIDCard(parseFilee(request,"lawPersonIDCardKeys",null));
-	//保持一对多关联关系
+		//保持一对多关联关系
+		registerApply.setApplyDate(new Date());
 		registerApply.otherQualificationsListToSet(request);
-	registerApply.setManageKey(Md5Util.getManageKey());
+		registerApply.setManageKey(Md5Util.getManageKey());
     	registerApplyService.add(registerApply);
         jsonResult.setMessage(getI18NMessage(request, "base.common.controller.operate.add.success"));
         return jsonResult;
@@ -180,6 +182,55 @@ public class RegisterApplyController  extends BaseController {
         jsonResult.setMessage(getI18NMessage(request, "base.common.controller.operate.update.success"));
         return jsonResult;
     }
+    
+    
+    /**
+     * 修改注册申请页面
+     * @param registerApply 需要修改的对象实体
+     * @param request HttpServletRequest请求对象
+     * 
+     */
+    @RequestMapping(value="/approve",method=RequestMethod.GET)
+	public void approveUI(@ModelAttribute(value="registerApply") RegisterApply registerApply,HttpServletRequest request) {
+    	request.setAttribute("tempBean", registerApply);
+		request.setAttribute("registerApplyStatusMap",RegisterApplyStatus.registerApplyStatusMap);
+		request.setAttribute("phoneOK",userService.getEntityByProperty(User.class, "phone", registerApply.getMobileNumber())==null);
+		request.setAttribute("usernameOK",userService.getById(User.class, registerApply.getUsername())==null);
+    }
+    /**
+     *  修改注册申请 
+     * @param registerApply 待修改的实体对象
+     * @param request HttpServletRequest对象
+     * @return JsonResult 操作结果
+     *
+     */
+    @RequestMapping(value="/approve",method=RequestMethod.POST)
+    @ResponseBody
+    public JsonResult approve(HttpServletRequest request,
+	@ModelAttribute(value="registerApply") RegisterApply registerApply,
+	BindingResult result) {
+    	JsonResult jsonResult = new JsonResult();
+    	
+    	if(registerApply.getStatus()==RegisterApplyStatus.Succes){
+    		
+    		boolean usernameOK = userService.getById(User.class, registerApply.getUsername())==null;
+        	if(!usernameOK){
+        		return JsonResult.error("用户名已存在!");
+        	}
+        	boolean phoneOK = userService.getEntityByProperty(User.class, "phone", registerApply.getMobileNumber())==null;
+        	if(!phoneOK){
+        		return JsonResult.error("手机号码已经被其他账号绑定!");
+        	}
+    		
+        	JsonResult res = null;
+    		res = userService.addUserForApply(registerApply);
+    		return res;
+    	}
+    	registerApplyService.update(registerApply);
+        jsonResult.setMessage("保存成功!");
+        return jsonResult;
+    }
+    
 	/**
 	 *  查看注册申请页面
      * @param registerApply 需要查看的实体对象

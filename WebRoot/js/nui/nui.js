@@ -369,7 +369,7 @@ function initUI(panelType){
     });
 	
     
-    $(".ckeditor-able").ckeditor({
+    $(".ckeditor-able",panel).ckeditor({
 		toolbar: [
 				//{ name: 'document', items: [ 'Source', '-', 'NewPage', 'Preview', '-', 'Templates' ] },	// Defines toolbar group with name (used to create voice label) and items in 3 subgroups.
 				[ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ],			// Defines toolbar group without name.
@@ -386,6 +386,8 @@ function initUI(panelType){
 		height:150,
 		language: 'zh-cn' //简体中文
 	});
+    
+    $("td>span.spilder:first-child",panel).remove();
     
 }
 

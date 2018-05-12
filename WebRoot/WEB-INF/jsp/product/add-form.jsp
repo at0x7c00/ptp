@@ -114,18 +114,6 @@
 											maxlength="255" />
 				</label>
 				</section>
-				<section class="col col-3">
-					<label class="input">
-						<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.status"/>:
-							<font style='color:red' class="required-mark">*</font>
-								<label class="select">
-								<form:select id="status" path="status" cssClass="required comboxed">
-								<option value=""><spring:message code="base.common.selectone"/></option>
-									<form:options  items="${productStatusMap}"/>
-								</form:select><i></i>
-								</label>
-				</label>
-				</section>
 				<c:if test="${not my }">
 				<section class="col col-3">
 					<label class="input">

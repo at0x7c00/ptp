@@ -86,7 +86,7 @@ public class User {
 	private Date thisLoginTime;
 	private Date lastLoginTime;
 	
-	private RegisterApply registerApply;
+	private String registerApplyId;
 
 	@Id
 	@GeneratedValue(generator = "userName_generator")
@@ -430,16 +430,20 @@ public class User {
 		thisLoginTime = date;
 	}
 
-	@ManyToOne(targetEntity = RegisterApply.class)
-	@JoinColumn(name = "register_apply", nullable = true)
-	@Fetch(FetchMode.SELECT)
-	public RegisterApply getRegisterApply() {
-		return registerApply;
+	@Column(name = "register_apply_id")
+	public String getRegisterApplyId() {
+		return registerApplyId;
 	}
 
-	public void setRegisterApply(RegisterApply registerApply) {
-		this.registerApply = registerApply;
+	public void setRegisterApplyId(String registerApplyId) {
+		this.registerApplyId = registerApplyId;
 	}
+
+	@Transient
+	public String getDesc() {
+		return getChineseName() + "(" + getUsername() + ")";
+	}
+
 	
 	
 }

@@ -3,11 +3,11 @@
 			<th align="center" data-sortfield="name" class="${nfn:sortClass(pageBean,'name')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.name"/>
 		</th>
-			<th align="center" data-sortfield="brand" class="${nfn:sortClass(pageBean,'brand')}">
-			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.brand"/>
-		</th>
 			<th align="center" data-sortfield="category" class="${nfn:sortClass(pageBean,'category')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.category"/>
+		</th>
+			<th align="center" data-sortfield="brand" class="${nfn:sortClass(pageBean,'brand')}">
+			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.brand"/>
 		</th>
 		<%-- <th align="center" data-sortfield="spec" class="${nfn:sortClass(pageBean,'spec')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.spec"/>
@@ -34,9 +34,12 @@
 			<th align="center" data-sortfield="status" class="${nfn:sortClass(pageBean,'status')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.status"/>
 		</th>
-			<th align="center" data-sortfield="creator" class="${nfn:sortClass(pageBean,'creator')}">
+		<c:if test="${not my }">
+		<th align="center" data-sortfield="creator" class="${nfn:sortClass(pageBean,'creator')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.creator"/>
 		</th>
+		</c:if>
 		<th align="center" data-sortfield="qrCode" class="${nfn:sortClass(pageBean,'qrCode')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.qrCode"/>
 		</th>
+		<th>操作</th>
