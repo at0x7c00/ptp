@@ -460,6 +460,13 @@ public class ProductController  extends BaseController {
         listFormParam(request,product,null);
     }
     
+    @RequestMapping(value="/detail",method=RequestMethod.GET,params = {"uuid"})
+	public void detailByUuid(@RequestParam(value="uuid") String uuid,HttpServletRequest request) {
+    	Product product = productService.getEntityByProperty(Product.class, "uuid", uuid);
+    	request.setAttribute("tempBean", product);
+        listFormParam(request,product,null);
+    }
+    
     @RequestMapping(value="/myDelete",method=RequestMethod.GET)
     @ResponseBody
     public JsonResult myDelete(HttpServletRequest request,@ModelAttribute Product product) {

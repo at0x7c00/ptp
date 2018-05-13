@@ -30,7 +30,6 @@
 	<div class="title-text">
 		<img src="${basePath}frontend/css/img/title.png">
 	</div>
-	<h1 class="page-title">商品信息</h1>
 	</div>
 	
 	<div class="wrapper form query">
@@ -39,87 +38,8 @@
 			<div>
 				
 				<div class="item">
-					<div class="item-title">商品名称</div>
-					<div class="item-content">${product.name }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">品牌</div>
-					<div class="item-content">&nbsp;${product.brand }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">所属类目</div>
-					<div class="item-content">&nbsp;${product.category.fullName }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">商品详情</div>
-					<div class="item-content">&nbsp;${product.description }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">联系电话</div>
-					<div class="item-content">&nbsp;${product.tel}</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">商品规格</div>
-					<div class="item-content">&nbsp;${product.spec }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">商品生产地</div>
-					<div class="item-content">&nbsp;${product.productAddr }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">商品溯源追踪</div>
-					<div class="item-content">&nbsp;${product.trace }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">商品有效期</div>
-					<div class="item-content">&nbsp;<fmt:formatDate value="${product.deadline}" pattern="yyyy-MM-dd"/></div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">商品批号</div>
-					<div class="item-content">&nbsp;${product.batchNum }</div>
-				</div>
-				
-				<div class="item">
-					<div class="item-title">执行标准</div>
-					<div class="item-content">&nbsp;${product.standard }</div>
-				</div>
-				
-				<div class="item">
-				
-					<div class="img-wrapper">
-						<div class="item-title">商品检验报告</div>
-						<div class="images">
-							<c:forEach items="${product.checkPictures}" var="p">
-								<img alt="" src="${basePath}filee/viewPic.do?manageKey=${p.manageKey}"/>
-							</c:forEach>
-						</div>
-					</div>
-					
-					<div class="img-wrapper">
-						<div class="item-title">其他资质</div>
-						<div class="images">
-							<c:forEach items="${product.otherQualifications}" var="p">
-								<img alt="" src="${basePath}filee/viewPic.do?manageKey=${p.manageKey}"/>
-							</c:forEach>
-						</div>
-					</div>
-					
-					<div class="img-wrapper">
-						<div class="item-title">商品图片</div>
-						<div class="images">
-							<c:if test="${not empty product.picture}">
-								<img alt="" src="${basePath}filee/viewPic.do?manageKey=${product.picture.manageKey}"/>
-							</c:if>
-						</div>
+					<div class="item-content">
+					<h2 style="text-align:center;color:red;list-style:2px;">您查询的商品不存在或已下架。</h2>
 					</div>
 				</div>
 			</div>

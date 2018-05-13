@@ -13,3 +13,8 @@
 		<td>
 		${tempBean.sessionID}
 		</td>
+		<td>
+		<a href="${basePath}product/detail.do?uuid=${tempBean.productId}" target="dialogTodo" title="查看产品">
+			${tempBean.productId }
+		</a>
+		</td>

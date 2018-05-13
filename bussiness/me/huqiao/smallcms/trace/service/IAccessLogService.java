@@ -1,9 +1,13 @@
 package me.huqiao.smallcms.trace.service;
+import java.util.Date;
 import java.util.List;
 
 import me.huqiao.smallcms.common.service.IBaseService;
 import me.huqiao.smallcms.history.entity.HistoryRecord;
+import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.trace.entity.AccessLog;
+import me.huqiao.smallcms.trace.service.impl.PVSummary;
+import me.huqiao.smallcms.trace.service.impl.RegionStat;
 import me.huqiao.smallcms.util.web.Page;
 /**
  * 访问日志Service接口
@@ -46,4 +50,14 @@ public interface IAccessLogService extends IBaseService<AccessLog> {
 	 * 
 	 */
 	List<AccessLog> queryById(Integer[] ids);
+	public boolean addLog(String ip, String id, String productId, String username,
+			String page,String agent);
+	public List<RegionStat> regionStat(Date start, Date end, User user,
+			String productId);
+	
+	public PVSummary pvStat(Date start, Date end, User user,
+			String productId);
+	
+	public PVSummary uvStat(Date start, Date end, User user,
+			String productId);
 }

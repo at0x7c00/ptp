@@ -15,3 +15,6 @@
 			<th align="center" data-sortfield="sessionID" class="${nfn:sortClass(pageBean,'sessionID')}">
 			<spring:message code="props.me.huqiao.smallcms.trace.entity.AccessLog.sessionID"/>
 		</th>
+			<th align="center" data-sortfield="sessionID" class="${nfn:sortClass(pageBean,'sessionID')}">
+			产品ID
+		</th>

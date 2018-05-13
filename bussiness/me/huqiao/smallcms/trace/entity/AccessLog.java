@@ -9,6 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import me.huqiao.smallcms.util.HttpUtil;
+import me.huqiao.smallcms.util.JacksonUtil;
+
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 /**
  * 访问日志
@@ -19,6 +23,9 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @Table(name="trace_access_log")
 @JsonIgnoreProperties( value={"hibernateLazyInitializer","handler"})
 public class AccessLog{
+	
+	final static Logger log = Logger.getLogger(AccessLog.class);
+	
 	/**唯一识别ID号 */
 	protected Integer id;
 	/**@param id 要设置的唯一标示号*/
@@ -44,6 +51,13 @@ public class AccessLog{
 	private String sessionID;
 	
 	private String productId;
+	
+	private String userAgent;
+	private String country;
+	private String region;
+	private String city;
+	private String isp;
+	private String countryId;
 
 	/**MD5管理ID*/
 	protected String manageKey;
@@ -185,6 +199,79 @@ public String getSessionID(){
 	}
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+	
+	@Column(name = "user_agent",nullable = true)
+	public String getUserAgent() {
+		return userAgent;
+	}
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	
+	@Column(name = "country",nullable = true)
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	@Column(name = "_region",nullable = true)
+	public String getRegion() {
+		return region;
+	}
+	
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	
+	@Column(name = "city",nullable = true)
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	@Column(name = "isp",nullable = true)
+	public String getIsp() {
+		return isp;
+	}
+	public void setIsp(String isp) {
+		this.isp = isp;
+	}
+	
+	@Column(name = "country_id",nullable = true)
+	public String getCountryId() {
+		return countryId;
+	}
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
+	}
+	final static String ipInfoUrl = "http://ip.taobao.com/service/getIpInfo.php?ip=";
+	public void parsePositionInfos() {
+		
+		String ipInfoJson = null;
+		try{
+			ipInfoJson = HttpUtil.getRequest(ipInfoUrl + this.ip);
+		}catch(Exception e){
+			log.error("Cannot get ipinfo from api:" + ipInfoUrl);
+			return;
+		}
+		try{
+			IpInfo info = null;
+			info = (IpInfo) JacksonUtil.transfer(ipInfoJson, IpInfo.class);
+			IpInfoData data = info.getData();
+			if(data!=null){
+				this.country = data.getCountry();
+				this.region = data.getRegion();
+				this.city = data.getCity();
+				this.isp = data.getIsp();
+				this.countryId = data.getCountry_id();
+			}
+		}catch(Exception e){
+			log.error("Unable to parse ip info:from " + ipInfoJson + " to Info object:" + e.getMessage());
+		}
 	}
 	
 }

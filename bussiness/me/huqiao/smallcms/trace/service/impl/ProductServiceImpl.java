@@ -25,7 +25,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements IPro
     public Page<Product> getListPage(Product product,Page pageInfo) {
       	pageInfo.setTotalCount(productDao.findListRowCount(product).intValue());
 		pageInfo.setOrderField(pageInfo.getOrderField() == null ? "id": pageInfo.getOrderField());
-		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "asc": pageInfo.getOrderDirection());
+		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "desc": pageInfo.getOrderDirection());
 		pageInfo.setList(productDao.findListPage(product,pageInfo));
         return pageInfo;
     }
@@ -33,7 +33,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements IPro
 	public Page<HistoryRecord<Product>> getHistoryListPage(Product product, Page pageInfo) {
 		pageInfo.setTotalCount(productDao.findHistoryListRowCount(product,pageInfo).intValue());
 		pageInfo.setOrderField(pageInfo.getOrderField() == null ? "id": pageInfo.getOrderField());
-		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "asc": pageInfo.getOrderDirection());
+		pageInfo.setOrderDirection(pageInfo.getOrderDirection() == null ? "desc": pageInfo.getOrderDirection());
 		pageInfo.setList(productDao.findHistoryListPage(product,pageInfo));
         return pageInfo;
 	}
@@ -52,5 +52,9 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements IPro
 	@Override
 	public List<Product> queryById(Integer[] ids) {
 		return productDao.findById(ids);
+	}
+	
+	public boolean addQueryCount(Integer id){
+		return productDao.addQueryCount(id);
 	}
 }

@@ -119,7 +119,7 @@
 						<label class="input"> 
 										<label class="select">
 										<form:select id="creator" path="creator" cssClass=" comboxed">
-										<option value="">${my }-<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.creator"/>-</option>
+										<option value="">-<spring:message code="props.me.huqiao.smallcms.trace.entity.Product.creator"/>-</option>
 											<form:options  items="${userList}" itemValue="username" itemLabel="username"/>
 										</form:select>
 										<i></i>

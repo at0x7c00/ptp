@@ -46,4 +46,6 @@ public interface IProductService extends IBaseService<Product> {
 	 * 
 	 */
 	List<Product> queryById(Integer[] ids);
+	
+	public boolean addQueryCount(Integer id);
 }

@@ -31,6 +31,7 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/smartadmin-skins.css">
 
 		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/demo.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/extension.css">
 
 		<!-- FAVICONS -->
 		<link rel="shortcut icon" href="${basePath}img/favicon/${ficon}.ico" type="image/x-icon">
@@ -283,7 +284,9 @@
 
 		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
-
+<script type="text/javascript">
+var $cfg = {},$pdp = {},$FF = {};
+</script>
 		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
 		<script src="${basePath}js/jquery/1.11.1/jquery.min.js"></script>
 		<script src="${basePath}js/jquery/jquery.md5.js"></script>
@@ -402,6 +405,12 @@
 		<!-- MAIN APP JS FILE -->
 		<script src="${basePath}js/app.js"></script>
 		<script src="${basePath}js/jquery/jquery.cookie.js"></script>
+		<script src="${basePath}js/fusioncharts/js/fusioncharts.js"></script>
+		<script src="${basePath}js/fusioncharts/js/fusioncharts.maps.js"></script>
+		<script src="${basePath}js/fusioncharts/js/fusioncharts-jquery-plugin.min.js"></script>
+		<script src="${basePath}js/fusioncharts/js/themes/fusioncharts.theme.fint.js"></script>
+		<script src="${basePath}js/fusioncharts/js/maps/fusioncharts.china2.js"></script>
+		<script src="${basePath}js/fusioncharts/js/maps/fusioncharts.usa.js"></script>
 		<script type="text/javascript">
 			$('.modal-dialog').draggable({
 	            handle: ".modal-header"

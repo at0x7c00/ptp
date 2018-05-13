@@ -1,0 +1,118 @@
+.pv-summary .circle{
+	width:185px;
+	height:185px;
+	border-radius:50%;
+	background: url(./img/circle-bg.png)no-repeat center;
+	position: relative;
+}
+.circle-wrapper{
+	width:185px;
+	height:185px;
+	background: #59c7f9;
+	border-radius:50%;
+	margin-left:160px;
+}
+.circle-wrapper:hover{
+	background: #48b6e8;
+}
+.circle-center{
+	width: 150px;
+    height: 150px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    left: 17px;
+    top: 17px;
+    text-align: center;
+}
+
+.circle-center h1{
+	font-size:32px;
+	color:#59c7f9;
+	font-weight:400;
+	margin-bottom:0px;
+	margin-top:42px;
+}
+.subtitle{
+	font-size:14px;
+	font-weight:400;
+	color:gray;
+}
+.pv-summary{
+	position: relative;
+	width:500px;
+}
+.pv-summary>div.lt,.pv-summary>div.lb,.pv-summary>div.rt,.pv-summary>div.rb{
+	position:absolute;
+	height:56px;
+	width:130px;
+	border-bottom:1px solid #ddd;
+	text-align: center;
+}
+.pv-summary>div.lb{
+	top:90px;
+	left:0px;
+}
+.pv-summary>div.rt{
+	top:0px;
+	right:0px;
+}
+.pv-summary>div.rb{
+	top:90px;
+	right:0px;
+}
+.pv-summary>div>h2{
+	font-size:20px;
+	font-weight:400;
+	color:#59c7f9;
+	margin-bottom:0px;
+	padding-bottom:0px;
+	margin-top:0px;
+}
+.pv-summary>div>span.little-title{
+	font-size:14px;
+	font-weight:400;
+	color:gray;
+}
+.main-title{
+	text-align: center;
+	font-size:28px;
+	font-weight:400;
+	color:#59c7f9;
+	margin-bottom:45px;
+}
+.main-wrapper{
+	display: inline-block;
+	width:500px;
+	margin:20px 0px;
+}
+.main-wrapper:not(:first-child){
+	margin-left:30px;
+}
+.jarviswidget>div{
+	border-width:1px;
+}
+
+.main-wrapper.uv .main-title{
+	color: #8d91ff;
+}
+.main-wrapper.uv .circle-center h1{
+	color: #8d91ff;
+}
+.main-wrapper.uv .pv-summary>div>h2{
+	color: #8d91ff;
+}
+.main-wrapper.uv .circle-wrapper{
+	background: #8d91ff;
+}
+.main-wrapper.uv .circle-wrapper:hover{
+	background: #7c80ee;
+}
+
+.main-wrapper.uv:hover .main-title,.main-wrapper.uv:hover .circle-center h1,.main-wrapper.uv:hover .pv-summary>div>h2{
+	color:#7c80ee;
+}
+
+.main-wrapper:hover .main-title,.main-wrapper:hover .circle-center h1,.main-wrapper:hover .pv-summary>div>h2{
+	color:#48b6e8;
+}

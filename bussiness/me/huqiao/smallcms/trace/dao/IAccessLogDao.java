@@ -1,9 +1,13 @@
 package me.huqiao.smallcms.trace.dao;
+import java.util.Date;
 import java.util.List;
 
 import me.huqiao.smallcms.common.dao.IBaseDao;
 import me.huqiao.smallcms.history.entity.HistoryRecord;
+import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.trace.entity.AccessLog;
+import me.huqiao.smallcms.trace.service.impl.PVStat;
+import me.huqiao.smallcms.trace.service.impl.RegionStat;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.hibernate.Criteria;
@@ -70,4 +74,12 @@ public interface IAccessLogDao extends IBaseDao<AccessLog> {
 	 * @return List<AccessLog>  访问日志列表
      */
 	List<AccessLog> findById(Integer[] ids);
+	List<RegionStat> regionStat(Date start, Date end, User user,
+			String productId);
+	
+	public List<PVStat> pvStat(Date start, Date end, User user,
+			String productId);
+	
+	public List<PVStat> uvStat(Date start, Date end, User user,
+			String productId);
 }

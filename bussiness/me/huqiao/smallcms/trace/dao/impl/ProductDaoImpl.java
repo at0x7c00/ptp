@@ -10,6 +10,7 @@ import me.huqiao.smallcms.trace.entity.Product;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -204,5 +205,12 @@ criteria.add(Restrictions.le("deadline",product.getDeadlineEnd()));
 		Criteria criteria = getSession().createCriteria(Product.class)
 		.add(Restrictions.in("id", ids));
 		return criteria.list();
+	}
+	@Override
+	public boolean addQueryCount(Integer id) {
+		Query query = getSession().createSQLQuery("update trace_product p set p.query_count = p.query_count+1 where p.id=:id");
+		query.setParameter("id", id);
+		int updated = query.executeUpdate();
+		return updated == 1;
 	}
 }

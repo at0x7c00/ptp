@@ -104,6 +104,9 @@ private String tel;
 private ProductStatus status;
 /**所属用户*/
 private User creator;
+
+private Long queryCount;
+
 	/**所属用户模糊查询条件*/
 private String creatorQuery;
 
@@ -659,4 +662,20 @@ public String getCreatorQuery(){
 		}
 		logs.add(log);
 	}
+	
+	@Column(name = "query_count",nullable = true)
+	public Long getQueryCount() {
+		return queryCount;
+	}
+	public void setQueryCount(Long queryCount) {
+		this.queryCount = queryCount;
+	}
+	public void addQueryCount() {
+		if(getQueryCount()==null){
+			setQueryCount(1l);
+		}else{
+			setQueryCount(getQueryCount()+1);
+		}
+	}
+	
 }

@@ -23,6 +23,7 @@ import me.huqiao.smallcms.trace.entity.Product;
 import me.huqiao.smallcms.trace.entity.RegisterApply;
 import me.huqiao.smallcms.trace.entity.enumtype.RegisterApplyStatus;
 import me.huqiao.smallcms.trace.entity.propertyeditor.RegisterApplyEditor;
+import me.huqiao.smallcms.trace.service.IAccessLogService;
 import me.huqiao.smallcms.trace.service.IOperateLogService;
 import me.huqiao.smallcms.trace.service.IProductService;
 import me.huqiao.smallcms.trace.service.IRegisterApplyService;
@@ -33,6 +34,7 @@ import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.LoginInfo;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -46,9 +48,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.UserAgent;
+import eu.bitwalker.useragentutils.Version;
+
 @Controller
 public class FrontendContrller{
-
+final static Logger log = Logger.getLogger(FrontendContrller.class);
 	@Resource
 	private ISMSService smsService;
 	@Resource
@@ -63,6 +69,8 @@ public class FrontendContrller{
     private ICommonFileService fileService;
     @Resource
     private IProductService productService;
+    @Resource
+    private IAccessLogService accessLogService;
 
     
 	@Value("${sm.limit.per.ip}")
@@ -228,9 +236,25 @@ public class FrontendContrller{
 	
 	@RequestMapping(value = "/query/{uuid}")
 	public String query(@PathVariable(value = "uuid")String uuid,HttpServletRequest request){
+		String userAgent = request.getHeader("User-Agent");
+		
+		Browser browser = UserAgent.parseUserAgentString(userAgent).getBrowser();
+		//获取浏览器版本号
+		Version version = browser.getVersion(request.getHeader("User-Agent"));
+		String info = browser.getName() + "/" + version.getVersion();
+		
 		Product product = productService.getEntityByProperty(Product.class, "uuid", uuid);
 		if(product==null || !product.getCanDown()){
 			return "product404";
+		}
+		String page = request.getRequestURI();
+		String ip = request.getRemoteHost();
+		boolean addQueryCount = accessLogService.addLog(ip,request.getSession().getId(),product.getUuid(),product.getCreator().getUsername(),page,info);
+		if(addQueryCount){
+			boolean updateSuccess = productService.addQueryCount(product.getId());
+			if(!updateSuccess){
+				log.error("Cannot update product query count!");
+			}
 		}
 		request.setAttribute("product", product);
 		return "query";

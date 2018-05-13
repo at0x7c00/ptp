@@ -1,15 +1,23 @@
 package me.huqiao.smallcms.trace.dao.impl;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.huqiao.smallcms.common.dao.impl.BaseDaoImpl;
 import me.huqiao.smallcms.history.entity.HistoryRecord;
 import me.huqiao.smallcms.history.entity.TestRevisionEntity;
+import me.huqiao.smallcms.sys.entity.User;
 import me.huqiao.smallcms.trace.dao.IAccessLogDao;
 import me.huqiao.smallcms.trace.entity.AccessLog;
+import me.huqiao.smallcms.trace.service.impl.PVStat;
+import me.huqiao.smallcms.trace.service.impl.RegionStat;
+import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.Page;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -169,4 +177,99 @@ criteria.add(Restrictions.le("accessTime",accessLog.getAccessTimeEnd()));
 		.add(Restrictions.in("id", ids));
 		return criteria.list();
 	}
+	@Override
+	public List<RegionStat> regionStat(Date start, Date end, User user,
+			String productId) {
+		
+		StringBuffer hql = new StringBuffer("select new me.huqiao.smallcms.trace.service.impl.RegionStat(log.region,count(log.id)) from AccessLog log where log.countryId='CN' ");
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(start!=null){
+			hql.append(" and log.accessTime>=:start");
+			params.put("start", start);
+		}
+		if(end!=null){
+			hql.append(" and log.accessTime<=:end");
+			params.put("end", end);
+		}
+		if(user!=null){
+			hql.append(" and log.userID=:userId");
+			params.put("userId", user.getUsername());
+		}
+		if(StringUtil.isNotEmpty(productId)){
+			hql.append(" and log.productId=:productId");
+			params.put("productId", productId);
+		}
+		hql.append(" group by log.region order by count(log.id) desc");
+		
+		Query query = getSession().createQuery(hql.toString());
+		for(Map.Entry<String, Object> entry : params.entrySet()){
+			query.setParameter(entry.getKey(), entry.getValue());
+		}
+		List list = query.list();
+		return list;
+	}
+	
+	@Override
+	public List<PVStat> pvStat(Date start, Date end, User user,
+			String productId) {
+		
+		StringBuffer hql = new StringBuffer("select new me.huqiao.smallcms.trace.service.impl.PVStat(DATE_FORMAT(log.accessTime,'%Y-%m-%d'),count(log.id)) from AccessLog log where 1=1 ");
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(start!=null){
+			hql.append(" and log.accessTime>=:start");
+			params.put("start", start);
+		}
+		if(end!=null){
+			hql.append(" and log.accessTime<=:end");
+			params.put("end", end);
+		}
+		if(user!=null){
+			hql.append(" and log.userID=:userId");
+			params.put("userId", user.getUsername());
+		}
+		if(StringUtil.isNotEmpty(productId)){
+			hql.append(" and log.productId=:productId");
+			params.put("productId", productId);
+		}
+		hql.append(" group by DATE_FORMAT(log.accessTime,'%Y-%m-%d')");
+		
+		Query query = getSession().createQuery(hql.toString());
+		for(Map.Entry<String, Object> entry : params.entrySet()){
+			query.setParameter(entry.getKey(), entry.getValue());
+		}
+		return query.list();
+	}
+	
+	@Override
+	public List<PVStat> uvStat(Date start, Date end, User user,
+			String productId) {
+		
+		StringBuffer hql = new StringBuffer("select new me.huqiao.smallcms.trace.service.impl.PVStat(DATE_FORMAT(log.accessTime,'%Y-%m-%d'),count(distinct log.sessionID)) from AccessLog log where 1=1 ");
+		Map<String,Object> params = new HashMap<String,Object>();
+		if(start!=null){
+			hql.append(" and log.accessTime>=:start");
+			params.put("start", start);
+		}
+		if(end!=null){
+			hql.append(" and log.accessTime<=:end");
+			params.put("end", end);
+		}
+		if(user!=null){
+			hql.append(" and log.userID=:userId");
+			params.put("userId", user.getUsername());
+		}
+		if(StringUtil.isNotEmpty(productId)){
+			hql.append(" and log.productId=:productId");
+			params.put("productId", productId);
+		}
+		hql.append(" group by DATE_FORMAT(log.accessTime,'%Y-%m-%d')");
+		
+		Query query = getSession().createQuery(hql.toString());
+		for(Map.Entry<String, Object> entry : params.entrySet()){
+			query.setParameter(entry.getKey(), entry.getValue());
+		}
+		return query.list();
+	}
+	
+	
 }

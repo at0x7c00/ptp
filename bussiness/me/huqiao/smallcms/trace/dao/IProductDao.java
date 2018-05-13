@@ -70,4 +70,5 @@ public interface IProductDao extends IBaseDao<Product> {
 	 * @return List<Product>  商品列表
      */
 	List<Product> findById(Integer[] ids);
+	boolean addQueryCount(Integer id);
 }

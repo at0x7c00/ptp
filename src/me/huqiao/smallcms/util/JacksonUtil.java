@@ -10,6 +10,9 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 
+
+
+
 /**
  * jackson JSON处理工具类
  * @author huqiao
@@ -32,4 +35,8 @@ public class JacksonUtil {
 	public static Object json2Object(String json,Class type) throws JsonParseException, JsonMappingException, IOException{
 		return objectMapper.readValue(json, type);
 	}
+
+	  public static Object transfer(String json,Class clazz) throws IOException{
+		  return objectMapper.readValue(json, clazz);
+	  }
 }

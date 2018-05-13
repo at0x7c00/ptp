@@ -1,5 +1,6 @@
 package me.huqiao.smallcms.trace.controller;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,9 +10,16 @@ import javax.validation.Valid;
 
 import me.huqiao.smallcms.common.controller.BaseController;
 import me.huqiao.smallcms.common.entity.Select2;
+import me.huqiao.smallcms.sys.entity.User;
+import me.huqiao.smallcms.sys.service.IUserService;
 import me.huqiao.smallcms.trace.entity.AccessLog;
 import me.huqiao.smallcms.trace.service.IAccessLogService;
+import me.huqiao.smallcms.trace.service.impl.PVSummary;
+import me.huqiao.smallcms.trace.service.impl.RegionStat;
+import me.huqiao.smallcms.trace.service.impl.RegionStatSummary;
+import me.huqiao.smallcms.util.DateUtil;
 import me.huqiao.smallcms.util.Md5Util;
+import me.huqiao.smallcms.util.StringUtil;
 import me.huqiao.smallcms.util.web.JsonResult;
 import me.huqiao.smallcms.util.web.Page;
 
@@ -36,6 +44,8 @@ public class AccessLogController  extends BaseController {
    /**访问日志服务*/
     @Resource
     private IAccessLogService accessLogService;
+    @Resource
+    private IUserService userService;
  /**
   * 注册属性编辑器
   * @param binder 数据绑定器
@@ -347,4 +357,55 @@ public String tabAddForm(
 		request.setAttribute("propName", propName);
 		return "accessLog/tab-detail-form";
 	}
+	
+	@RequestMapping("stat")
+	public void stat(@RequestParam(value = "start",required = false)Date start,
+			@RequestParam(value = "end",required = false)Date end,
+			HttpServletRequest request){
+		User user = getCurrentUser();
+		String productId = null;
+		
+		doStat(start,end,user,productId,request);
+		
+	}
+	
+	
+	@RequestMapping("allStat")
+	public String allStat(@RequestParam(value = "start",required = false)Date start,
+			@RequestParam(value = "end",required = false)Date end,
+			@RequestParam(value = "username",required = false)String username,
+			HttpServletRequest request){
+		User user = null;
+		String productId = null;//现在不支持产品的筛查
+		if(StringUtil.isNotEmpty(username)){
+			user = userService.getById(User.class,username);
+		}
+		doStat(start,end,user,productId,request);
+		request.setAttribute("all", true);
+		request.setAttribute("userList", userService.findAll(User.class));
+		return "accessLog/stat";
+	}
+	
+	private void doStat(Date start,Date end,User user,String productId,HttpServletRequest request){
+		Date now = new Date();
+		if(start==null && end==null){
+			start = DateUtil.getFistDateInMonth(now);
+			end = now;
+		}
+		List<RegionStat> regionStatList = accessLogService.regionStat(start,end,user,productId);
+		request.setAttribute("regionStatList", regionStatList);
+		request.setAttribute("regionStatSummary", new RegionStatSummary(regionStatList).calcute());
+		
+		PVSummary pvSummary = accessLogService.pvStat(start, end, user, productId);
+		PVSummary uvSummary = accessLogService.uvStat(start, end, user, productId);
+		
+		request.setAttribute("pvSummary", pvSummary);
+		request.setAttribute("uvSummary", uvSummary);
+		request.setAttribute("start", start);
+		request.setAttribute("end", end);
+		if(user!=null){
+			request.setAttribute("username", user.getUsername());
+		}
+	}
+	
 }
