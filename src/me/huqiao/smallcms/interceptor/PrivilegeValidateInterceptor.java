@@ -79,7 +79,7 @@ public class PrivilegeValidateInterceptor extends HandlerInterceptorAdapter {
 		".{1,}/selectTree.do",
 		".{1,}/templateExport.do",
 		//".{1,}/import.do", 
-		"filee/dialogToAdd.do",
+		"filee/dialogToAdd",
 		"area/getProvincesByArea.do",
 		"agent/tradeRecord.do",
 		"user/updatePassword.do"

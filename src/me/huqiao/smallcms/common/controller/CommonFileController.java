@@ -148,6 +148,30 @@ public class CommonFileController extends BaseController {
 		fileeService.add(filee);
 		return new UploadResult(true,filee.getManageKey());
 	}
+	
+	
+	@RequestMapping(value = "/add", method = RequestMethod.POST,params = {"linkFile=yes"})
+	@ResponseBody
+	public UploadResult addLinkFile(@RequestParam(value = "folderId", required = false) Integer folderId,
+			@RequestParam(value = "linkFileUrl",required=false)String linkFileUrl,
+            HttpServletRequest request) {
+		
+		
+		folderId = folderId == null ? 1 : folderId;
+		
+		CommonFolder folder = commonFolderService.getById(CommonFolder.class, folderId);
+		CommonFile filee = new CommonFile();
+		filee.setCreateDate(new Date());
+		filee.setManageKey(Md5Util.getManageKey());
+		filee.setCreateDate(new Date());
+		filee.setName(linkFileUrl);
+		filee.setInuse(UseStatus.UnUse);
+		filee.setStoreName("");
+		filee.setFolder(folder);
+		filee.setFileLink(linkFileUrl);
+		fileeService.add(filee);
+		return new UploadResult(true,filee.getManageKey());
+	}
 
 	@RequestMapping(value = "/frontendAdd", method = RequestMethod.POST)
 	@ResponseBody
@@ -190,6 +214,19 @@ public class CommonFileController extends BaseController {
 	 */
 	@RequestMapping(value = "/dialogToAdd",method = RequestMethod.GET)
 	public void dialogToAdd(HttpServletRequest request,
+			@RequestParam(value = "selectlist") String selectlist,
+			@RequestParam(value = "formTargetPanel")String formTargetPanel,
+			@RequestParam(value = "maxFilesize")String maxFilesize,
+			@RequestParam(value = "acceptedFiles")String acceptedFiles
+			){
+		request.setAttribute("selectlist", selectlist);
+		request.setAttribute("formTargetPanel", formTargetPanel);
+		request.setAttribute("maxFilesize", maxFilesize);
+		request.setAttribute("acceptedFiles", acceptedFiles);
+	}
+	
+	@RequestMapping(value = "/dialogToAddLinkFile",method = RequestMethod.GET)
+	public void dialogToAddLinkFile(HttpServletRequest request,
 			@RequestParam(value = "selectlist") String selectlist,
 			@RequestParam(value = "formTargetPanel")String formTargetPanel,
 			@RequestParam(value = "maxFilesize")String maxFilesize,
@@ -338,7 +375,14 @@ public class CommonFileController extends BaseController {
 		if(filee==null){
 			return null;
 		}
-		
+		if(filee.isLinkFile()){
+			try {
+				response.sendRedirect(filee.getFileLink());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
 		response.setCharacterEncoding("UTF-8");
 		///response.setHeader("Info", filee.getFullName());
 		response.setHeader("Pragma", "No-cache");

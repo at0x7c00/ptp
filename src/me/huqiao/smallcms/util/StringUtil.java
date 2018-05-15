@@ -260,10 +260,14 @@ public class StringUtil {
 		return res;
 	}
 	public static boolean passwordValidate(String str,StringBuffer msgs,String title){
-		boolean res = Pattern.matches(passwordRegx, str);
-		if(!res){
-			msgs.append(title).append("格式错误：不是有效的密码").append("<br/>");
+		if(str.length()<8 || str.length()>30){
+			msgs.append(title).append("格式错误：长度非法").append("<br/>");
+			return false;
 		}
-		return res;
+		if(Pattern.matches("^[0-9]{8,30}$", str)){
+			msgs.append(title).append("格式错误：不能全是数字").append("<br/>");
+			return false;
+		}
+		return true;
 	}
 }

@@ -57,6 +57,7 @@ public class CommonFile {
 	/**管理*/
 	private String manageKey;
 	
+	private String fileLink;
 	
 	private UseStatus inuse;
 
@@ -271,7 +272,20 @@ public class CommonFile {
 			return false;
 		return true;
 	}
-	
+
+	@Column(name = "file_link")
+	public String getFileLink() {
+		return fileLink;
+	}
+
+	public void setFileLink(String fileLink) {
+		this.fileLink = fileLink;
+	}
+
+	@Transient
+	public boolean isLinkFile(){
+		return StringUtil.isNotEmpty(fileLink);
+	}
 	
 }
 

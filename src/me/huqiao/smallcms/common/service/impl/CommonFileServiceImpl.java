@@ -3,6 +3,7 @@ package me.huqiao.smallcms.common.service.impl;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -100,6 +101,14 @@ public class CommonFileServiceImpl extends BaseServiceImpl<CommonFile> implement
 			return false;
 		}else{
 			CommonFile filee = fileeList.get(0);
+			if(filee.isLinkFile()){
+				try {
+					response.sendRedirect(filee.getFileLink());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
 			CommonFolder comFolder = filee.getFolder();
 			String strFileFullPath = "";
 			String strFileName = "";
@@ -178,11 +187,13 @@ public class CommonFileServiceImpl extends BaseServiceImpl<CommonFile> implement
 		for(CommonFile file : filesNotInused){
 			try{
 				x+=file.getId() + ",";
-				System.out.println(file.getInuse());
 				delete(file);
 			}catch(Exception e){
 				file.setInuse(UseStatus.InUse);
 				update(file);
+				continue;
+			}
+			if(file.isLinkFile()){
 				continue;
 			}
 			File diskFile = new File(file.getFullName());

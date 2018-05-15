@@ -23,7 +23,7 @@ import com.aliyuncs.profile.IClientProfile;
 public class SMSServiceImpl implements ISMSService {
 	
 	static Logger log = Logger.getLogger(SMSServiceImpl.class);
-	static boolean test = true;
+	static boolean test = false;
 	
 	@Value("${sms.accessKey}")
 	private String accessKeyId;//你的accessKeyId,参考本文档步骤2

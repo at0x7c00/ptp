@@ -359,7 +359,8 @@ function imageView(key){
 			return this;
 		},
 		isValidPwd:function() {
-			return (new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$/).test(this)); 
+			return (this && this.length >=8 && this.length <=30 && !(new RegExp(/^[0-9]{8,30}$/).test(this)));
+			//return (new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$/).test(this)); 
 		},
 		isValidMail:function(){
 			return(new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(this.trim()));

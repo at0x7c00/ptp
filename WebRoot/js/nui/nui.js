@@ -286,6 +286,7 @@ function initUI(panelType){
 	
 	$(".select-list-delete-btn",panel).deleteSelectListItem();
 	$(".attachement-dialog-add-btn",panel).attachementDialogAdd();
+	$(".linkfile-dialog-add-btn",panel).linkFileDialogAdd();
 	$(".softwareAtt-dialog-add-btn",panel).softwareAttDialogAdd();
 	
 	$(".tab-form",panel).tabForm();
@@ -340,6 +341,48 @@ function initUI(panelType){
 				NUI.closeJquiDialog();
 			}
 		});
+	});
+	
+	
+	$(".linkfile-add-form",panel).each(function(){
+		var $this = $(this);
+		var selectlist = $this.data("selectlist");
+		var select2 = $this.data("select2");
+		var formTargetPanel = $this.data("formtargetpanel");
+		var maxFilesize = $this.data("maxfilesize");
+		var acceptedFiles = $this.data("acceptedfiles");
+		
+		$this[0].onsubmit = function(e){
+			e.preventDefault();
+		};
+		$this.submit(function(e){
+			if(!$this.valid()){
+				return false;
+			}
+			try{
+				$.ajax({
+					type: $this.attr("method") || 'POST',
+					url:$this.attr("action"),
+					data:$this.serializeArray(),
+					dataType:"json",
+					cache: false,
+					success: function(data){
+						if(selectlist!=undefined && selectlist!=''){
+							$("#" + selectlist,NUI.getCurrentPanel(formTargetPanel)).loadSelectList("add",data.file_key);
+						}else{
+							$("#" + select2,NUI.getCurrentPanel(formTargetPanel)).objectselect(data.id,panel);
+						}
+						NUI.closeJquiDialog();
+					},
+					error: NUI.ajaxError
+				});
+			}catch(e){
+				alert("ajax请求时出现异常:"+e.message);
+			}
+			e.preventDefault();
+			return false;
+		});
+		
 	});
 	
 	$(".unit-table",panel).unitTable();
@@ -573,6 +616,7 @@ $.fn.extend({
 	},
 	
 });
+
 
 
 (function($){

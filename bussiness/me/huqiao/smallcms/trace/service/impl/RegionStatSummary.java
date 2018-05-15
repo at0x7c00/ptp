@@ -73,13 +73,9 @@ public class RegionStatSummary {
 	}
 	
 	public Integer getMaxValue(){
-		int i = 0;
-		while(i*100<max){
+		int i = max;
+		while(i%10!=0){
 			i++;
-		}
-		i = i*100;
-		if(i<100){
-			i = 100;
 		}
 		return i;
 	}

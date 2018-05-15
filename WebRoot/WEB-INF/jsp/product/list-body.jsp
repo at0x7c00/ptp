@@ -24,7 +24,7 @@
 		</td> --%>
 		<td>
 		<span class="badge ${tempBean.statusStyle }" style="padding:3px 7px;">
-			${productStatusMap[tempBean.status]}
+			${tempBean.status.description}
 		</span>
 		</td>
 		<c:if test="${not my }">

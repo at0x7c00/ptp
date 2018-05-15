@@ -136,6 +136,22 @@ $.fn.extend({
 			});
 		});
 	},
+	linkFileDialogAdd : function(){
+		return this.each(function(){
+			$(this).click(function(){
+				var $this = $(this);
+				var title = $this.attr("title") || '添加文件';
+				var selectlist = $this.data("selectlist");
+				var targetPanel = $this.data("targetpanel");
+				var maxFilesize = $this.data("maxfilesize");
+				var acceptedFiles = $this.data("acceptedfiles");
+				jquiDialogTodo(title,basePath + 'filee/dialogToAddLinkFile.do?selectlist='+selectlist
+						+'&formTargetPanel=' + targetPanel
+						+'&maxFilesize=' + maxFilesize
+						+'&acceptedFiles=' + acceptedFiles);
+			});
+		});
+	},
 	
     softwareAttDialogAdd:function(){
     	return this.each(function(){

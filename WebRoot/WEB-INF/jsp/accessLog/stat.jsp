@@ -195,13 +195,14 @@ $(function(){
         dataFormat: 'json',
         dataSource: {
             "chart": {
-                "animation": "0",
-                "showbevel": "0",
+                "animation": "1",
+                "showbevel": "1",
                 "usehovercolor": "1",
                 "canvasbordercolor": "FFFFFF",
                 "bordercolor": "FFFFFF",
                 "showlegend": "1",
-                "showshadow": "0",
+                "showshadow": "1",
+                "useSNameInLabels": "1",
                 "legendposition": "BOTTOM",
                 "legendborderalpha": "0",
                 "legendbordercolor": "ffffff",
@@ -209,15 +210,15 @@ $(function(){
                 "legendshadow": "0",
                 "caption": "地域访问统计",
                 "connectorcolor": "000000",
-                "fillalpha": "80",
+                "fillalpha": "90",
                 "hovercolor": "CCCCCC",
-                "showborder": 0
+                "showborder": '1'
             },
             "colorrange": {
                 "minvalue": "0",
                 "startlabel": "低",
                 "endlabel": "高",
-                "code": "8fadea",
+                "code": "#eeeeee",
                 "gradient": "1",
                 "color": [{"maxvalue": "${regionStatSummary.maxValue/2}", "code": "8fadea"}, {"maxvalue": "${regionStatSummary.maxValue}", "code": "0c48c5"}]
             },
