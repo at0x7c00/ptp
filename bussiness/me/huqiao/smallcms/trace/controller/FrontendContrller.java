@@ -241,7 +241,10 @@ final static Logger log = Logger.getLogger(FrontendContrller.class);
 		Browser browser = UserAgent.parseUserAgentString(userAgent).getBrowser();
 		//获取浏览器版本号
 		Version version = browser.getVersion(request.getHeader("User-Agent"));
-		String info = browser.getName() + "/" + version.getVersion();
+		String info = null;
+		if(browser!=null){
+			info = browser.getName() + "/" + (version==null ? "" : version.getVersion());
+		}
 		
 		Product product = productService.getEntityByProperty(Product.class, "uuid", uuid);
 		if(product==null || !product.getCanDown()){
@@ -347,9 +350,7 @@ final static Logger log = Logger.getLogger(FrontendContrller.class);
 			//为登录和密码找回查询用户信息
 			User user = null;
 			if("login".equals(forWhat) || "forget".equals(forWhat)){
-				if("forget".equals(forWhat)){
-					number = username;
-				}
+				number = username;
 				user = userService.findByUsernameOfPhonenumber(username,number);
 				if(user==null){
 					operateLogService.addLog("WARN",ip,"getCode:"+number,GetCodeMsgs.USER_NOT_FOUND);

@@ -267,11 +267,6 @@ public class ProductController  extends BaseController {
 			oldKey = product.getPicture().getManageKey();
 		}
 		product.setPicture(parseFilee(request,"pictureKeys",oldKey));
-		String oldKey2 = null;
-		if(product.getQrCode()!=null){
-			oldKey2 = product.getQrCode().getManageKey();
-		}
-		product.setQrCode(parseFilee(request,"qrCodeKeys",oldKey2));
 		//保持一对多关联关系
 		List<CommonFile> checkPictures = parseFilee(request.getParameterValues("checkPicturesKeys"),product.getCheckPicturesKeys().split(","));
 		if(product.getCheckPictures()==null){
