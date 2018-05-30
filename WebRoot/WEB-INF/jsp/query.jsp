@@ -95,6 +95,7 @@
 				
 				<div class="item">
 				
+					<c:if test="${not empty  product.checkPictures}">
 					<div class="img-wrapper">
 						<div class="item-title">商品检验报告</div>
 						<div class="images">
@@ -103,7 +104,9 @@
 							</c:forEach>
 						</div>
 					</div>
+					</c:if>
 					
+					<c:if test="${not empty  product.otherQualifications}">
 					<div class="img-wrapper">
 						<div class="item-title">其他资质</div>
 						<div class="images">
@@ -112,7 +115,9 @@
 							</c:forEach>
 						</div>
 					</div>
+					</c:if>
 					
+					<c:if test="${not empty  product.picture }">
 					<div class="img-wrapper">
 						<div class="item-title">商品图片</div>
 						<div class="images">
@@ -121,6 +126,7 @@
 							</c:if>
 						</div>
 					</div>
+					</c:if>
 				</div>
 			</div>
 		</div>
