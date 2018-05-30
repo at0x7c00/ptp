@@ -94,5 +94,11 @@
 					</a>
 				</n:pv>
 				</c:if>
+				<n:pv url="product/approve.do">
+					<a href="${basePath}product/approve.do?manageKey=${tempBean.manageKey}&create_qr_code=yes"  
+							rel="manageKeys" target="ajaxTodo" method="GET" title="生成二维码"> 
+						生成二维码
+					</a>
+				</n:pv>
 			</c:if>
 			</td>

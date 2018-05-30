@@ -410,21 +410,8 @@ public class ProductController  extends BaseController {
     			boolean ok = pass.equals("Yes");
     			product.addLog(getCurrentUser().getDesc(),"审核"+(ok?"通过":"拒绝")+":"+(StringUtil.isEmpty(remark) ? "" : remark));
     			product.setStatus(ok ? ProductStatus.Success : ProductStatus.Failed);
-    			if(ok && product.getQrCode()==null){
-    				try {
-    					InputStream in = this.getClass().getClassLoader().getResourceAsStream("qr-base.png");
-    					String url = systemRootUrl; 
-    					if(!url.endsWith("/")){
-    						url += "/";
-    					}
-    					url += "query/" + product.getUuid() + ".do";
-    					CommonFile file = fileService.mkQrCode(in,url,product.getUuid());
-    					product.setQrCode(file);
-    					in.close();
-    				} catch (Exception e) {
-    					e.printStackTrace();
-    				}
-    				
+    			if(ok){
+    				createQrCode(request,product);
     			}
     			productService.update(product);
     			return JsonResult.success("审核成功!");
@@ -435,6 +422,28 @@ public class ProductController  extends BaseController {
     		e.printStackTrace();
     		return JsonResult.error(e.getMessage());
     	}
+    }
+    
+    @RequestMapping(value="/approve",method=RequestMethod.GET,params= "create_qr_code=yes")
+    @ResponseBody
+    public JsonResult createQrCode(HttpServletRequest request,
+	@ModelAttribute(value="product") Product product) {
+    	try {
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("qr-base.png");
+			String url = systemRootUrl; 
+			if(!url.endsWith("/")){
+				url += "/";
+			}
+			url += "query/" + product.getUuid() + ".do";
+			CommonFile file = fileService.mkQrCode(in,url,product.getUuid());
+			product.setQrCode(file);
+			productService.update(product);
+			in.close();
+			return JsonResult.success("生成成功!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonResult.error(e.getMessage());
+		}
     }
     
     @RequestMapping(value="/myDetail",method=RequestMethod.GET)
