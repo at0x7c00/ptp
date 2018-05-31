@@ -31,7 +31,7 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/smartadmin-skins.css">
 
 		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/demo.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/extension.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}css/extension.css?v=2.0">
 
 		<!-- FAVICONS -->
 		<link rel="shortcut icon" href="${basePath}img/favicon/${ficon}.ico" type="image/x-icon">

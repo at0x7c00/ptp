@@ -16,7 +16,7 @@
 		<link rel="icon" href="img/favicon/${ficon}.ico" type="image/x-icon">
 
 	</head>
-	<body>
+	<body class="responsable">
 	
 	<div class="main">
 	
@@ -94,14 +94,33 @@
 				</div>
 				
 				<div class="item">
-				
+					
+					<c:if test="${not empty  product.picture }">
+					<div class="img-wrapper">
+						<div class="item-title">商品图片</div>
+						<div class="images">
+							<c:if test="${not empty product.picture}">
+								<img alt="" src="${basePath}static/image/${product.picture.manageKey}${fn:contains(product.picture.extensionName,'.')?'':'.'}${product.picture.extensionName}?manageKey=${product.picture.manageKey}"/>
+							</c:if>
+							<div class="dots">
+								<div class="dot"></div>
+							</div>
+						</div>
+					</div>
+					</c:if>
+					
 					<c:if test="${not empty  product.checkPictures}">
 					<div class="img-wrapper">
 						<div class="item-title">商品检验报告</div>
 						<div class="images">
 							<c:forEach items="${product.checkPictures}" var="p">
-								<img alt="" src="${basePath}filee/viewPic.do?manageKey=${p.manageKey}"/>
+								<img alt="" src="${basePath}static/image/${p.manageKey}${fn:contains(p.extensionName,'.')?'':'.'}${p.extensionName}?manageKey=${p.manageKey}"/>
 							</c:forEach>
+							<div class="dots">
+								<c:forEach items="${product.checkPictures}" var="p">
+								<div class="dot"></div>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
 					</c:if>
@@ -111,19 +130,13 @@
 						<div class="item-title">其他资质</div>
 						<div class="images">
 							<c:forEach items="${product.otherQualifications}" var="p">
-								<img alt="" src="${basePath}filee/viewPic.do?manageKey=${p.manageKey}"/>
+								<img alt="" src="${basePath}static/image/${p.manageKey}${fn:contains(p.extensionName,'.')?'':'.'}${p.extensionName}?manageKey=${p.manageKey}"/>
 							</c:forEach>
-						</div>
-					</div>
-					</c:if>
-					
-					<c:if test="${not empty  product.picture }">
-					<div class="img-wrapper">
-						<div class="item-title">商品图片</div>
-						<div class="images">
-							<c:if test="${not empty product.picture}">
-								<img alt="" src="${basePath}filee/viewPic.do?manageKey=${product.picture.manageKey}"/>
-							</c:if>
+							<div class="dots">
+								<c:forEach items="${product.otherQualifications}" var="p">
+								<div class="dot"></div>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
 					</c:if>

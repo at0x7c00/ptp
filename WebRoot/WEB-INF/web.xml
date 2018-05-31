@@ -51,6 +51,14 @@
     <url-pattern>/verifyimage.create</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>ImageFileServlet</servlet-name>
+    <servlet-class>me.huqiao.smallcms.servlet.ImageFileServlet</servlet-class>
+  </servlet>
+    <servlet-mapping>
+    <servlet-name>ImageFileServlet</servlet-name>
+    <url-pattern>/static/image/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>CXFServlet</servlet-name>
     <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
     <load-on-startup>1</load-on-startup>

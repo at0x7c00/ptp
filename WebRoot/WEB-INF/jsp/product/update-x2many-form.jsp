@@ -49,7 +49,7 @@
 						   >
 							<i class="fa fa-plus"></i> <spring:message code="base.function.add"/>
 						</a>
-						<a class="btn btn-primary link-dialog-add-btn"
+						<a class="btn btn-primary linkfile-dialog-add-btn"
 						   href="javascript:void(0)" style="padding:5px 15px;" 
 						   data-selectlist="checkPictureselectList" 
 						   data-targetpanel="${targetPanel}"

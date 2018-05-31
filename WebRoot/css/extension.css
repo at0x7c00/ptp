@@ -116,3 +116,7 @@
 .main-wrapper:hover .main-title,.main-wrapper:hover .circle-center h1,.main-wrapper:hover .pv-summary>div>h2{
 	color:#48b6e8;
 }
+
+.linkfile-dialog-add-btn{
+	display: none; 
+}

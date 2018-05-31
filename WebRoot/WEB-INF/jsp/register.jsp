@@ -9,7 +9,9 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
+<%--
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ --%>
 		<link rel="stylesheet" type="text/css" media="screen" href="${basePath}frontend/css/core.css?_t=${_random}">
 		<!-- FAVICONS -->
 		<link rel="shortcut icon" href="img/favicon/${ficon}.ico" type="image/x-icon">
